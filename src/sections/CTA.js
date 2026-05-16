@@ -8,9 +8,9 @@ import {
   Select,
   Carousel,
 } from "antd";
+import { useState } from "react";
 import TextArea from "antd/es/input/TextArea";
 import { labelConfig } from "../assets/static.config";
-import CustomButton from "../components/CustomButton";
 import { Icon } from "@iconify/react";
 
 const contentStyle = {
@@ -27,6 +27,43 @@ const servicesOptions = [
 ];
 
 const CTA = () => {
+  const [form] = Form.useForm();
+  const [result, setResult] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const onFinish = async (values) => {
+    setIsSubmitting(true);
+    setResult("Sending...");
+
+    const formData = new FormData();
+    formData.append("access_key", "53971ea8-15fe-4bea-a6db-02da0dc6ceed");
+    formData.append("name", values.name || "");
+    formData.append("email", values.email || "");
+    formData.append("companyName", values.companyName || "");
+    formData.append("service", String(values.service || ""));
+    formData.append("message", values.message || "");
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setResult("Form Submitted Successfully");
+        form.resetFields();
+      } else {
+        setResult(data.message || "Error");
+      }
+    } catch (error) {
+      setResult("Error");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <ConfigProvider
       theme={{
@@ -72,11 +109,11 @@ const CTA = () => {
               marginTop: 20,
             }}
           >
-            <Form layout="vertical">
+            <Form form={form} layout="vertical" onFinish={onFinish}>
               <Row gutter={16}>
                 <Col span={12} style={{ padding: "0px 8px" }} md={12} xs={24}>
                   <Form.Item
-                    name={labelConfig.fullName}
+                    name="name"
                     label="Full Name"
                     rules={[
                       {
@@ -144,8 +181,15 @@ const CTA = () => {
               </Row>
 
               <Row>
-                <CustomButton content={labelConfig.sendMessage} />
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="font-semibold hover:bg-light-brown hover:border hover:text-dark-brown border-2 border-dark-brown text-dark-brown bg-dark-brown text-light-brown px-6 py-3 rounded-full transition duration-300 text-xs md:text-sm disabled:opacity-70 disabled:cursor-not-allowed"
+                >
+                  {isSubmitting ? "Sending..." : labelConfig.sendMessage}
+                </button>
               </Row>
+              <span className="text-sm text-slate-700 mt-3 inline-block">{result}</span>
             </Form>
           </Card>
         </div>
