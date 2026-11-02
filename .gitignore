@@ -2,14 +2,30 @@
 
 # dependencies
 /node_modules
+/new/node_modules
 /.pnp
 .pnp.js
+
+# local npm cache
+/.npm-cache
 
 # testing
 /coverage
 
 # production
 /build
+/dist
+/new/build
+
+# local-only reference files
+/legacy
+/HomePage.png
+/mobile.svg
+/new/src/assets/Home Page.png
+
+# obsolete root app (superseded by new/, kept locally)
+/src
+/public
 
 # misc
 .DS_Store
