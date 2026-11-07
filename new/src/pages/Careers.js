@@ -98,8 +98,8 @@ const CareersPage = () => {
       <section className="px-5 md:px-[4vw]">
         <div className="grid gap-8 pt-[27px] sm:grid-cols-2 lg:grid-cols-4 lg:gap-x-12">
           {benefits.map(([title, body]) => (
-            <div key={title} className="flex flex-col gap-[11px] lg:py-10">
-              <p className="text-[12px] lg:text-[20px] font-bold uppercase leading-none tracking-[0.12em] text-dark-brown">
+            <div key={title} className="flex flex-col lg:gap-[11px] lg:py-10">
+              <p className="text-[18px] lg:text-[20px] font-bold uppercase leading-none tracking-[0.12em] text-dark-brown">
                 <span className="font-['Barlow_Condensed'] lg:text-2xl font-bold">{title}</span>
               </p>
               <p className="mt-[16px] max-w-[378px] text-[14px] lg:text-[18px] lg:leading-[22px] text-dark-brown/70">

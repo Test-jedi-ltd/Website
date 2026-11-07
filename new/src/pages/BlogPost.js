@@ -213,7 +213,7 @@ const BlogPostPage = () => (
                   src={image}
                   alt=""
                   loading="lazy"
-                  className="h-[388px] w-full rounded-[12px] object-fill"
+                  className="h-[240px] lg:h-full w-full rounded-[12px] object-fill"
                 />
               ))}
             </div>
