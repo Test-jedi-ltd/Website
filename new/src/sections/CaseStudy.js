@@ -56,7 +56,7 @@ const CaseStudy = () => {
         </p>
       </div>
 
-      <div className="flex flex-col items-center gap-10 p-8 lg:mx-6 lg:min-h-[392px] lg:px-[31px] lg:pb-0 lg:pt-[34px]">
+      <div className="flex flex-col items-center gap-10 lg:mx-6 lg:min-h-[392px] lg:px-[31px] lg:pb-0 lg:pt-[34px]">
         <div className="bg-[#D9C5B2] p-10">
           <p className="font-bold uppercase tracking-[0.14em] text-[#964A21]">
             <span className="font-['DM_Sans'] font-bold">

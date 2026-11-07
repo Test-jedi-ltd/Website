@@ -49,7 +49,7 @@ const ServiceOne = () => (
 );
 
 const ServiceTwo = () => (
-  <div className="mt-[99px] grid gap-10 lg:grid-cols-[minmax(0,1fr)_988px]  lg:items-center lg:gap-[56px]">
+  <div className="mt-[99px] flex flex-col-reverse lg:grid gap-10 lg:grid-cols-[minmax(0,1fr)_988px]  lg:items-center lg:gap-[56px]">
     <div className="flex items-center justify-center lg:justify-start">
       <img src={serviceIllustrationTwo} alt="Test automation pipeline" className="h-auto w-full lg:order-first" />
     </div>

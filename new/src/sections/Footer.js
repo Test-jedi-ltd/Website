@@ -28,8 +28,8 @@ const Footer = ({ hideCta = false }) => (
         <div>
           <h2 className="text-[44px] leading-[0.9] tracking-[0.01em] text-[#FDF9D2] sm:text-[50px] lg:text-[56px]">
             <span className="font-['Barlow_Condensed'] text-xl font-bold uppercase md:text-4xl xl:text-7xl flex flex-col gap-2">
-              <span className="block">SEND US THE BUILD.</span>
-              <span className="block">WE’LL SEND BACK THE TRUTH.</span>
+              <span className="block leading-[0.9] tracking-[0.01em]">SEND US THE BUILD. <br/> WE’LL SEND BACK THE TRUTH.</span>
+              {/* <span className="block leading-[0.9] tracking-[0.01em]"></span> */}
             </span>
           </h2>
           <p className="mt-[10px] leading-[24px] text-[#E8D6AF]">
@@ -50,12 +50,12 @@ const Footer = ({ hideCta = false }) => (
     )}
 
     <section className="px-5 pt-16 text-[#FDF9D2] md:px-[4vw] md:pt-[52px]">
-      <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[32%_23.7%_23.7%_auto] lg:gap-0">
+      <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[32%_23.7%_23.7%_minmax(150px,1fr)] lg:gap-0">
         <div>
           <img
             src={footerLogo}
             alt="Test-Jedi"
-            className="ml-4 mt-[11px] h-auto w-[92px] sm:w-[110px] lg:w-[129px]"
+            className="mt-[11px] h-auto w-[120px] lg:w-[142px]"
           />
           <p className="mt-[26px] max-w-[400px] leading-[21px] text-[#9E8F90]">
             <span className="font-['DM_Sans']">
@@ -100,12 +100,12 @@ const Footer = ({ hideCta = false }) => (
           <p className="text-[10px] uppercase tracking-[0.14em] text-[#D9C5B2]">
             <span className="font-['DM_Sans'] font-semibold">CONTACT</span>
           </p>
-          <ul className="mt-[11px] space-y-[7px] text-[14px] leading-[22px] text-[#9E8F90]">
+          <ul className="mt-[11px] grid grid-cols-1 gap-[7px] text-[14px] leading-[22px] text-[#9E8F90]">
             {contact.map(([label, href]) => (
               <li key={label}>
                 {href.startsWith("/") ? (
                   <Link
-                    className={`transition-colors hover:text-[#FDF9D2] ${
+                    className={`block max-w-full break-words transition-colors hover:text-[#FDF9D2] ${
                       label === "Propose a project" ? "text-[#D9C5B2]" : ""
                     }`}
                     to={href}
@@ -114,7 +114,7 @@ const Footer = ({ hideCta = false }) => (
                   </Link>
                 ) : (
                   <a
-                    className={`transition-colors hover:text-[#FDF9D2] ${
+                    className={`block max-w-full break-words transition-colors hover:text-[#FDF9D2] ${
                       label === "Propose a project" ? "text-[#D9C5B2]" : ""
                     }`}
                     href={href}
