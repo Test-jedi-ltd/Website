@@ -109,7 +109,7 @@ const Navbar = () => {
           placement="top"
           open={open}
           onClose={() => setOpen(false)}
-          closeIcon={<Icon icon="fluent-mdl2:cancel" width="24" style={{ color: "#964A21" }} />}
+          closeIcon={<Icon icon="fluent-mdl2:cancel" width="24" style={{ color: "#964A21" }} className="mobile-drawer-close-icon" />}
           height="auto"
           style={{ backgroundColor: "#FDF9D2" }}
           styles={{ body: { paddingTop: 8, paddingBottom: 18 } }}

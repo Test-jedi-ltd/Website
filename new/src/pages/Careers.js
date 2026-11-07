@@ -1,6 +1,8 @@
 import Navbar from "../sections/Navbar";
 import Footer from "../sections/Footer";
 import cohortRings from "../assets/cohort-rings.svg";
+import { useState } from "react";
+import { Modal } from "antd";
 
 const benefits = [
   [
@@ -40,7 +42,26 @@ const roles = [
   ],
 ];
 
-const CareersPage = () => (
+const CareersPage = () => {
+  const [applicationOpen, setApplicationOpen] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [hasLaptop, setHasLaptop] = useState("");
+  const [tracks, setTracks] = useState([]);
+
+  const toggleTrack = (track) => {
+    setTracks((current) =>
+      current.includes(track)
+        ? current.filter((item) => item !== track)
+        : [...current, track]
+    );
+  };
+
+  const submitApplication = (event) => {
+    event.preventDefault();
+    setSubmitted(true);
+  };
+
+  return (
   <>
     <Navbar />
     <main className="overflow-hidden bg-light-brown text-dark-brown">
@@ -132,17 +153,112 @@ const CareersPage = () => (
               </span>
             </p>
           </div>
-          <a
-            href="mailto:careers@test-jedi.com"
+          <button
+            type="button"
+            onClick={() => {
+              setSubmitted(false);
+              setApplicationOpen(true);
+            }}
             className="flex h-[46px] w-[178px] shrink-0 items-center justify-center bg-dark-brown text-[13px] font-semibold uppercase leading-none tracking-[0.08em] text-light-brown"
           >
             <span className="font-['DM_Sans']">Apply for cohort</span>
-          </a>
+          </button>
         </div>
       </section>
     </main>
     <Footer hideCta />
+    <Modal
+      centered
+      open={applicationOpen}
+      onCancel={() => setApplicationOpen(false)}
+      footer={null}
+      width={760}
+      destroyOnHidden
+      closeIcon={<span className="cohort-modal-close" aria-label="Close">×</span>}
+      className="cohort-application-modal"
+      styles={{
+        body: { maxHeight: "calc(100vh - 120px)", overflowY: "auto", padding: 0 },
+      }}
+    >
+      {submitted ? (
+        <div className="cohort-modal-success">
+          <h2>Application received</h2>
+          <p>Thank you for registering your interest. Our team will contact you soon.</p>
+          <button type="button" onClick={() => setApplicationOpen(false)}>Close</button>
+        </div>
+      ) : (
+        <form className="cohort-application-form" onSubmit={submitApplication}>
+          <div className="cohort-modal-heading">
+            <h2>Apply for cohort</h2>
+            <p>Please fill out this quick form to register your interest.</p>
+          </div>
+
+          <fieldset>
+            <legend>Section 1: Personal details</legend>
+            <label>
+              Full name
+              <input name="fullName" type="text" placeholder="e.g. John Doe" required />
+            </label>
+            <label>
+              Email address
+              <input name="email" type="email" placeholder="e.g. johndoe@email.com" required />
+            </label>
+            <label>
+              Phone / WhatsApp number
+              <input name="phone" type="tel" placeholder="e.g. +234 80 1234 5678" required />
+            </label>
+          </fieldset>
+
+          <fieldset>
+            <legend>Section 2: Track of interest</legend>
+            <p className="cohort-field-question">Which testing track are you interested in?</p>
+            <div className="cohort-track-grid">
+              {["Manual QA Tester", "Automation Tester", "API & Backend Tester", "Performance Tester", "Help me choose (Not sure yet)"].map((track) => (
+                <label className="cohort-checkbox" key={track}>
+                  <input
+                    type="checkbox"
+                    checked={tracks.includes(track)}
+                    onChange={() => toggleTrack(track)}
+                  />
+                  <span>{track}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Section 3: Logistics</legend>
+            <label>
+              Current experience level
+              <select name="experience" defaultValue="" required>
+                <option value="" disabled>Select your experience level</option>
+                <option>Complete beginner</option>
+                <option>Some testing experience</option>
+                <option>Working QA professional</option>
+              </select>
+            </label>
+            <div className="cohort-field-question">Do you have a laptop &amp; internet access for online live classes?</div>
+            <div className="cohort-choice-row" role="group" aria-label="Laptop and internet access">
+              {["Yes", "No"].map((choice) => (
+                <button
+                  type="button"
+                  key={choice}
+                  className={hasLaptop === choice ? "selected" : ""}
+                  aria-pressed={hasLaptop === choice}
+                  onClick={() => setHasLaptop(choice)}
+                >
+                  {choice}
+                </button>
+              ))}
+            </div>
+          </fieldset>
+
+          <button className="cohort-submit" type="submit">Submit cohort application</button>
+        </form>
+      )}
+    </Modal>
   </>
-);
+  );
+};
 
 export default CareersPage;

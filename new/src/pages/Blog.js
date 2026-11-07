@@ -99,7 +99,7 @@ const BlogPage = () => (
               <span className="inline-flex h-[22px] items-center rounded-full bg-white px-[10px] text-[11px] font-semibold uppercase text-[#1A2D5B]">
                 {featuredPost.category}
               </span>
-              <span className="mt-[14px] block font-['Barlow'] text-[22px] font-bold leading-none text-light-brown sm:text-[28px] lg:text-[34px]">
+              <span className="mt-[14px] block font-['Barlow_Condensed'] text-[22px] font-bold leading-none text-light-brown sm:text-[28px] lg:text-[34px]">
                 {featuredPost.title}
               </span>
             </span>
