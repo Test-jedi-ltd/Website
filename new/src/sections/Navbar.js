@@ -21,11 +21,11 @@ const Navbar = () => {
 
   const goToBlog = () => {
     setOpen(false);
-    if (pathname === "/blog/load-testing-what-actually-breaks") {
+    if (pathname === "/blog" || pathname === "/postman-made-simple-5-todays-analogy-sending-a-letter") {
       window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
-    navigate("/blog/load-testing-what-actually-breaks");
+    navigate("/blog");
   };
 
   const goToServices = () => {
@@ -35,15 +35,6 @@ const Navbar = () => {
       return;
     }
     navigate("/services");
-  };
-
-  const goToCaseStudies = () => {
-    setOpen(false);
-    if (pathname === "/case-studies") {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      return;
-    }
-    navigate("/case-studies");
   };
 
   const goToCareers = () => {
@@ -75,7 +66,6 @@ const Navbar = () => {
         </button>
         <nav className="hidden lg:flex gap-[31px] justify-self-center relative -top-[3px]" aria-label="Main navigation">
           <button className={navLinkClass(pathname === "/services")} onClick={goToServices} aria-current={pathname === "/services" ? "page" : undefined}>{labelConfig.navbarServices}</button>
-          <button className={navLinkClass(pathname === "/case-studies")} onClick={goToCaseStudies} aria-current={pathname === "/case-studies" ? "page" : undefined}>{labelConfig.navbarCaseStudies}</button>
           <button className={navLinkClass(pathname === "/careers")} onClick={goToCareers} aria-current={pathname === "/careers" ? "page" : undefined}>{labelConfig.navbarCohorts}</button>
           <button className={navLinkClass(pathname.startsWith("/blog"))} onClick={goToBlog} aria-current={pathname.startsWith("/blog") ? "page" : undefined}>{labelConfig.navbarBlog}</button>
         </nav>
@@ -125,7 +115,6 @@ const Navbar = () => {
         >
           <nav className="flex flex-col gap-4">
             <button className={`text-left text-[15px] ${pathname === "/services" ? "text-accent-brown" : "text-dark-brown"}`} onClick={goToServices}>{labelConfig.navbarServices}</button>
-            <button className={`text-left text-[15px] ${pathname === "/case-studies" ? "text-accent-brown" : "text-dark-brown"}`} onClick={goToCaseStudies}>{labelConfig.navbarCaseStudies}</button>
             <button className={`text-left text-[15px] ${pathname === "/careers" ? "text-accent-brown" : "text-dark-brown"}`} onClick={goToCareers}>{labelConfig.navbarCohorts}</button>
             <button className={`text-left text-[15px] ${pathname.startsWith("/blog") ? "text-accent-brown" : "text-dark-brown"}`} onClick={goToBlog}>{labelConfig.navbarBlog}</button>
             <button

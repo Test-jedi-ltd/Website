@@ -18,10 +18,16 @@ const CTA = () => (
         <button className="justify-self-start mt-3 px-6 py-4 rounded-full bg-dark-brown text-white" type="submit">{labelConfig.sendMessage} ↗</button>
       </form>
     </section>
-    <section className="text-center px-5 md:px-[14vw] py-28 bg-light-brown">
+    <section className="bg-light-brown px-5 py-20 md:px-[7vw] md:py-28">
       <p className="text-[11px] uppercase tracking-[0.19em] text-dark-brown">{labelConfig.clientPerspective}</p>
-      <blockquote className="font-[Playfair_Display] text-4xl md:text-[74px] leading-[1.05] my-8 text-dark-brown">“{labelConfig.testimonial}”</blockquote>
-      <p className="text-xs uppercase tracking-[0.13em] text-dark-brown">{labelConfig.testimonialAuthor}</p>
+      <div className="mt-8 grid gap-8 lg:grid-cols-2">
+        {[labelConfig.testimonial, "They found the release blockers nobody else could reproduce, then gave our team a clear test plan for fixing them."].map((quote, index) => (
+          <figure key={quote} className="bg-white px-8 py-10 md:px-12 md:py-12">
+            <blockquote className="font-[Playfair_Display] text-3xl leading-[1.12] text-dark-brown md:text-[48px]">“{quote}”</blockquote>
+            <figcaption className="mt-8 text-xs uppercase tracking-[0.13em] text-dark-brown">{index === 0 ? labelConfig.testimonialAuthor : "Head of Quality · Fintech Platform"}</figcaption>
+          </figure>
+        ))}
+      </div>
     </section>
   </>
 );

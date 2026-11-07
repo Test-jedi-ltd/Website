@@ -1,11 +1,6 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { labelConfig } from "../assets/static.config";
-
-const posts = [
-  ["postAutomation", "postAutomationTitle", "postAutomationText", "post-art-1"],
-  ["postPerformance", "postPerformanceTitle", "postPerformanceText", "post-art-2"],
-  ["postSecurity", "postSecurityTitle", "postSecurityText", "post-art-3"],
-];
+import { featuredPost, posts } from "../pages/Blog";
 
 const Blog = () => {
   const navigate = useNavigate();
@@ -16,20 +11,29 @@ const Blog = () => {
       <div><p className="font-bold uppercase tracking-[0.19em] text-accent-brown mb-5">{labelConfig.journalEyebrow}</p><h2 className="font-[Playfair_Display] text-5xl md:text-[88px] text-dark-brown">{labelConfig.journalHeading}</h2></div>
       <button
         className="border-b border-dark-brown pb-2 text-dark-brown font-bold"
-        onClick={() => navigate("/blog/load-testing-what-actually-breaks")}
+        onClick={() => navigate("/blog")}
       >
         {labelConfig.viewAllArticles} <span aria-hidden="true">&rarr;</span>
       </button>
     </div>
     <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {posts.map(([categoryKey, titleKey, textKey, artClass], index) => (
-        <article key={titleKey}>
-          <div className={`post-art ${artClass} h-[270px] mb-6 relative`}><span className="absolute right-4 bottom-3 text-white text-[10px] tracking-[0.15em]">TEST / {String(index + 1).padStart(2, "0")}</span></div>
-          <p className="text-accent-brown uppercase tracking-[0.12em] text-[11px]">{labelConfig[categoryKey]}</p>
-          <h3 className=" text-3xl leading-tight my-4 text-dark-brown">{labelConfig[titleKey]}</h3>
-          <span className="leading-6 text-dark-brown">{labelConfig[textKey]}</span>
-        </article>
-      ))}
+      {[featuredPost, ...posts].slice(0, 3).map((post, index) => {
+        const card = (
+          <>
+            <img src={post.image} alt="" loading="lazy" className="mb-6 h-[270px] w-full rounded-[16px] object-cover" />
+            <p className="text-accent-brown uppercase tracking-[0.12em] text-[11px]">{post.category}</p>
+            <h3 className="my-4 text-3xl leading-tight text-dark-brown">{post.title}</h3>
+            {post.excerptLines && <span className="leading-6 text-dark-brown">{post.excerptLines.join(" ")}</span>}
+            {post.excerpt && <span className="leading-6 text-dark-brown">{post.excerpt}</span>}
+            <span className="absolute right-4 bottom-3 text-dark-brown text-[10px] tracking-[0.15em]">TEST / {String(index + 1).padStart(2, "0")}</span>
+          </>
+        );
+        return post.hasDetail ? (
+          <Link key={`${post.category}-${post.title}`} to={post.href} className="relative rounded-[16px] bg-white p-3 ring-1 ring-inset ring-dark-brown/10">{card}</Link>
+        ) : (
+          <article key={`${post.category}-${post.title}`} className="relative rounded-[16px] bg-white p-3 ring-1 ring-inset ring-dark-brown/10">{card}</article>
+        );
+      })}
     </div>
   </section>
   );

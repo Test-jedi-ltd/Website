@@ -1,17 +1,16 @@
 import { useNavigate } from "react-router-dom";
 import Navbar from "../sections/Navbar";
+import Footer from "../sections/Footer";
+import detailOne from "../assets/blog-post-detail-1.svg";
+import detailTwo from "../assets/blog-post-detail-2.svg";
+import detailThree from "../assets/blog-post-detail-3.svg";
+import detailFour from "../assets/blog-post-detail-4.svg";
 
 const contents = [
-  ["Where load tests lie", "where-load-tests-lie"],
-  ["Queue depth over CPU", "queue-depth-over-cpu"],
-  ["Modelling real arrival", "modelling-real-arrival"],
-  ["What to report", "what-to-report"],
-];
-
-const chartRows = [
-  ["CPU utilisation", "58%", "58%", "bg-medium-brown"],
-  ["Worker pool saturation", "97%", "97%", "bg-accent-brown"],
-  ["p95 time in queue", "4.2s", "84%", "bg-accent-brown"],
+  ["The letter", "the-letter"],
+  ["The headers", "the-headers"],
+  ["Request and response", "request-response"],
+  ["The takeaway", "the-takeaway"],
 ];
 
 const nextPosts = ["A test suite you can still read in a year", "Access control is a test case"];
@@ -26,29 +25,6 @@ const Heading = ({ id, children, className = "" }) => (
   <h2 id={id} className={`scroll-mt-28 text-[36px] leading-none text-dark-brown ${className}`}>
     <span className="font-['Barlow_Condensed'] font-bold uppercase">{children}</span>
   </h2>
-);
-
-const Chart = () => (
-  <div className="mt-[13px] w-full bg-dark-brown px-[18px] pb-[16px] pt-[26px]">
-    <p className="text-[8px] font-semibold uppercase leading-none tracking-[0.14em] text-medium-brown">
-      <span className="font-['DM_Sans'] font-semibold">
-        Soak run &middot; 5K concurrent sessions
-      </span>
-    </p>
-    <div className="mt-[17px] space-y-[12px]">
-      {chartRows.map(([label, value, width, tone]) => (
-        <div key={label}>
-          <div className="flex items-center justify-between text-[10px] leading-none text-light-brown">
-            <span className="font-['DM_Sans']">{label}</span>
-            <span className="font-['DM_Sans']">{value}</span>
-          </div>
-          <div className="mt-[6px] h-[6px] w-full bg-light-brown">
-            <div className={`h-[6px] ${tone}`} style={{ width }} />
-          </div>
-        </div>
-      ))}
-    </div>
-  </div>
 );
 
 const BlogPostPage = () => {
@@ -107,60 +83,44 @@ const BlogPostPage = () => {
 
               <h1 className="mt-[24px] text-[52px] leading-[0.94] text-dark-brown sm:text-[64px] sm:leading-[58px]">
                 <span className="font-['Barlow_Condensed'] font-bold uppercase tracking-[0.005em]">
-                  <span className="block">Load testing what</span>
-                  <span className="block">actually breaks</span>
+                  <span className="block">Postman Made Simple #5 :</span>
+                  <span className="block">Today's Analogy: Sending a Letter 📩</span>
                 </span>
               </h1>
 
               <div className="mt-[20px] max-w-[663px] text-[18px] leading-[31px] text-dark-brown/85 sm:text-[20px]">
                 <span className="font-['DM_Sans']">
-                  <span className="block">
-                    Most peak-traffic tests pass because they measure the wrong thing.
-                  </span>
-                  <span className="block">
-                    The server holds; the queue behind it does not.
-                  </span>
+                  <span className="block">Headers Aren't as Complicated as They Sound</span>
+                  <span className="block">Today's Analogy: Sending a Letter 📩</span>
                 </span>
               </div>
 
               <div className="mt-[22px] h-[2px] w-[64px] bg-accent-brown" aria-hidden="true" />
 
-              <div className="mt-[145px]">
-                <Heading id="queue-depth-over-cpu">Queue depth over CPU</Heading>
+              <img src={detailOne} alt="" className="mt-[52px] h-auto w-full rounded-[4px]" />
+              <div className="mt-[52px]">
+                <Heading id="the-letter">Think about sending a letter.</Heading>
                 <Body>
-                  We watch queue depth and time-in-queue before CPU. In four of the last five
-                  performance engagements, the first failure was a worker pool saturating while
-                  utilisation sat under 60 per cent - a graph that looks healthy right up to the
-                  point customers cannot check out.
+                  Last time, we talked about HTTP methods using a restaurant analogy. This week, let's keep the conversation going.
                 </Body>
-
-                <Chart />
-
-                <Heading id="modelling-real-arrival" className="mt-[33px]">
-                  Modelling real arrival
-                </Heading>
-                <Body>
-                  Take a week of production logs, find the sharpest minute, and shape the test
-                  around that rather than a round number. Add client retries with the same backoff
-                  your app ships. The test gets less flattering and much more useful.
-                </Body>
-
-                <figure className="mt-[21px] pl-[25px]">
-                  <blockquote className="max-w-[638px] text-[19.5px] leading-[30px] text-dark-brown">
-                    <span className="font-['DM_Sans']">
-                      If your load profile is a straight line, you are testing your load generator.
-                    </span>
-                  </blockquote>
-                </figure>
-
-                <Heading id="what-to-report" className="mt-[31px]">
-                  What to report
-                </Heading>
-                <Body>
-                  Three numbers a release manager can act on: the concurrency where p95 crosses
-                  your SLA, the component that saturated first, and the cheapest change that moves
-                  both. Everything else belongs in the appendix.
-                </Body>
+                <Body>The body is the actual letter. It contains the message you want to communicate. But the envelope carries additional information about the letter and how it should be handled. That's essentially what HTTP headers do.</Body>
+                <img src={detailTwo} alt="" className="mt-[32px] h-auto w-full rounded-[4px]" />
+                <Heading id="the-headers" className="mt-[52px]">The headers</Heading>
+                <Body>👤 Authorization → "Here's my ID. I'm allowed to be here."</Body>
+                <Body>📦 Content Type → "This is what's inside the envelope."</Body>
+                <Body>📬 Accept → "This is the kind of response I'd like back."</Body>
+                <Heading id="request-response" className="mt-[52px]">Request and response</Heading>
+                <Body>Communication usually goes both ways. You send a request, and you expect a response in return. Interestingly, both can have a body and headers.</Body>
+                <Body>The request body contains what you're sending to the server, while request headers provide additional information about how the server should process it.</Body>
+                <Body>The response body contains what the server sends back, while response headers provide additional information about that response.</Body>
+                <Body>And to our Jedi younglings currently going through the ongoing Test-Jedi cohort, I hope this makes the whole headers conversation a little easier to understand. 😊</Body>
+                <img src={detailThree} alt="" className="mt-[32px] h-auto w-full rounded-[4px]" />
+                <Heading id="the-takeaway" className="mt-[52px]">The takeaway</Heading>
+                <Body>When you're working with an API, remember: Body = The message. Headers = Extra information about how the message should be handled.</Body>
+                <Body>The next time you see a bunch of headers in Postman, don't let them intimidate you. 😄 They're basically the information written on the envelope.</Body>
+                <Body>And just like you wouldn't send a letter without an address on the envelope, an API request sometimes needs its headers to know exactly what to do with your message.</Body>
+                <Body>Class dismissed. See you next week. 😄</Body>
+                <img src={detailFour} alt="" className="mt-[32px] h-auto w-full rounded-[4px]" />
               </div>
             </article>
 
@@ -207,6 +167,7 @@ const BlogPostPage = () => {
           </div>
         </section>
       </main>
+      <Footer />
     </>
   );
 };

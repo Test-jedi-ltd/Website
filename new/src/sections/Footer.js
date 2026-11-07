@@ -10,7 +10,6 @@ const services = [
 
 const company = [
   ["Mission", "#mission"],
-  ["Case Studies", "#case-studies"],
   ["Cohorts", "#cohorts"],
   ["Blog", "#blog"],
 ];
@@ -21,8 +20,9 @@ const contact = [
   ["Propose a project", "/contact"],
 ];
 
-const Footer = () => (
+const Footer = ({ hideCta = false }) => (
   <footer className="bg-[#151240] p-0 text-[#FDF9D2]">
+    {!hideCta && (
     <section className="bg-[#964A21] px-5 pb-12 pt-16 md:px-[4vw] md:pb-[56px] md:pt-[62px]">
       <div className="flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between lg:gap-12">
         <div>
@@ -47,6 +47,7 @@ const Footer = () => (
         </Link>
       </div>
     </section>
+    )}
 
     <section className="px-5 pt-16 text-[#FDF9D2] md:px-[4vw] md:pt-[52px]">
       <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[32%_23.7%_23.7%_auto] lg:gap-0">
