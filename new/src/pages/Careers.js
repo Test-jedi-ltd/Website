@@ -51,7 +51,7 @@ const CareersPage = () => (
           aria-hidden="true"
           className="pointer-events-none absolute left-0 top-0 hidden h-auto w-full lg:block"
         />
-        <div className="py-10 relative grid gap-10 lg:grid-cols-[minmax(0,1fr)_809px] lg:items-start lg:gap-[60px]">
+        <div className="lg:py-10 relative grid gap-10 lg:grid-cols-[minmax(0,1fr)_809px] lg:items-start lg:gap-[60px]">
           <div className="">
             <p className="text-[12px] lg:text-[16px] font-semibold uppercase leading-none tracking-[0.14em] text-accent-brown">
               <span className="font-['DM_Sans'] font-semibold">Cohort program</span>
@@ -77,7 +77,7 @@ const CareersPage = () => (
       <section className="px-5 md:px-[4vw]">
         <div className="grid gap-8 pt-[27px] sm:grid-cols-2 lg:grid-cols-4 lg:gap-x-12">
           {benefits.map(([title, body]) => (
-            <div key={title} className="flex flex-col gap-[11px] py-10">
+            <div key={title} className="flex flex-col gap-[11px] lg:py-10">
               <p className="text-[12px] lg:text-[20px] font-bold uppercase leading-none tracking-[0.12em] text-dark-brown">
                 <span className="font-['Barlow_Condensed'] lg:text-2xl font-bold">{title}</span>
               </p>
@@ -105,7 +105,7 @@ const CareersPage = () => (
           {roles.map(([role, learn]) => (
             <div
               key={role}
-              className="grid gap-y-2 py-10 lg:h-[100px] lg:grid-cols-[45%_minmax(0,1fr)] lg:items-center lg:py-0"
+              className="grid gap-y-2 py-4 lg:py-10 lg:h-[100px] lg:grid-cols-[45%_minmax(0,1fr)] lg:items-center lg:py-0"
             >
               <p className="text-[30px] lg:text-[40px] leading-[0.97] text-dark-brown">
                 <span className="font-['Barlow_Condensed'] font-bold uppercase">{role}</span>

@@ -27,12 +27,12 @@ const Footer = ({ hideCta = false }) => (
       <div className="flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between lg:gap-12">
         <div>
           <h2 className="text-[44px] leading-[0.9] tracking-[0.01em] text-[#FDF9D2] sm:text-[50px] lg:text-[56px]">
-            <span className="font-['Barlow_Condensed'] text-xl font-bold uppercase md:text-4xl xl:text-7xl">
+            <span className="font-['Barlow_Condensed'] text-xl font-bold uppercase md:text-4xl xl:text-7xl flex flex-col gap-2">
               <span className="block">SEND US THE BUILD.</span>
               <span className="block">WE’LL SEND BACK THE TRUTH.</span>
             </span>
           </h2>
-          <p className="mt-[6px] leading-[24px] text-[#E8D6AF]">
+          <p className="mt-[10px] leading-[24px] text-[#E8D6AF]">
             <span className="font-['DM_Sans']">
               Tell us the scope and the deadline. We’ll reply with a test plan and a price within two working days.
             </span>

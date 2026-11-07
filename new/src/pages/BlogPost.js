@@ -1,175 +1,228 @@
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Navbar from "../sections/Navbar";
 import Footer from "../sections/Footer";
 import detailOne from "../assets/blog-post-detail-1.svg";
 import detailTwo from "../assets/blog-post-detail-2.svg";
 import detailThree from "../assets/blog-post-detail-3.svg";
 import detailFour from "../assets/blog-post-detail-4.svg";
+import relatedTwo from "../assets/blog-post-related-2.jpg";
+import heroImage from "../assets/blog-post-hero.jpg";
 
-const contents = [
-  ["The letter", "the-letter"],
-  ["The headers", "the-headers"],
-  ["Request and response", "request-response"],
-  ["The takeaway", "the-takeaway"],
+const storyImages = [detailOne, detailTwo, detailThree, detailFour];
+
+const relatedStories = [
+  {
+    category: "POSTMAN",
+    title: "Headers Aren't as Complicated as They Sound",
+    excerpt: "Today's Analogy: Sending a Letter",
+    image: detailTwo,
+    imageClass: "h-[137px]",
+    to: "/postman-made-simple-5-todays-analogy-sending-a-letter",
+  },
+  {
+    category: "TESTING",
+    title: "Is it a Frontend bug... or a Backend bug?",
+    image: relatedTwo,
+    imageClass: "h-[132px]",
+    to: "/blog",
+  },
 ];
 
-const nextPosts = ["A test suite you can still read in a year", "Access control is a test case"];
+const bodyParagraphs = [
+  "Last time, we talked about HTTP methods using a restaurant analogy.",
+  "This week, let's keep the conversation going.",
+  "Think about sending a letter.",
+  "The body is the actual letter. It contains the message you want to communicate.",
+  "But the envelope carries additional information about the letter and how it should be handled.",
+  "That's essentially what HTTP headers do.",
+];
 
-const Body = ({ children }) => (
-  <p className="mt-[10px] max-w-[663px] text-[16px] leading-[28px] text-dark-brown/80">
+const afterBulletsParagraphs = [
+  "And just like sending a letter, communication usually goes both ways.",
+  "You send a request, and you expect a response in return.",
+  "Interestingly, both can have a body and headers.",
+  "The request body contains what you're sending to the server, while the request headers provide additional information about how the server should process it.",
+  "The response body contains what the server sends back, while the response headers provide additional information about that response.",
+  "And to our Jedi younglings currently going through the ongoing Test-Jedi cohort, I hope this makes the whole headers conversation a little easier to understand. 😊",
+  "So, when you're working with an API, remember:",
+  "Body = The message.",
+  "Headers = Extra information about how the message should be handled.",
+  "The next time you see a bunch of headers in Postman, don't let them intimidate you. 😄",
+];
+
+const closingParagraphs = [
+  "They're basically the information written on the envelope.",
+  "And just like you wouldn't send a letter without an address on the envelope, an API request sometimes needs its headers to know exactly what to do with your message.",
+  "Class dismissed. See you next week. 😄",
+];
+
+const bullets = [
+  ["👤", "Authorization", "\"Here's my ID. I'm allowed to be here.\""],
+  ["📦", "Content Type", "\"This is what's inside the envelope.\""],
+  ["📬", "Accept", "\"This is the kind of response I'd like back.\""],
+];
+
+const Body = ({ children, className = "" }) => (
+  <p className={`m-0 ${className} text-[16px] lg:text-[18px] font-semibold leading-[24px] text-[#1A2D5B]`}>
     <span className="font-['DM_Sans']">{children}</span>
   </p>
 );
 
-const Heading = ({ id, children, className = "" }) => (
-  <h2 id={id} className={`scroll-mt-28 text-[36px] leading-none text-dark-brown ${className}`}>
-    <span className="font-['Barlow_Condensed'] font-bold uppercase">{children}</span>
-  </h2>
+const RelatedCard = ({ story }) => (
+  <Link
+    to={story.to}
+    className={`block flex flex-col gap-2 rounded-[12px] bg-white p-[7px] ring-1 ring-inset ring-black/5 transition-transform duration-300 hover:-translate-y-0.5 ${
+      story.excerpt ? "pb-[24px]" : "pb-[37px]"
+    }`}
+  >
+    <img
+      src={story.image}
+      alt=""
+      loading="lazy"
+      className={`${story.imageClass} w-full min-h-[280px] rounded-[8px] object-cover`}
+    />
+    <span className="mt-[9px] flex h-[14px] w-fit items-center rounded-full border border-[#C4D5FF] bg-white px-[6px]">
+      <span className="font-['DM_Sans'] text-[8px] lg:text-[10px] leading-none text-[#1A2D5B]">
+        {story.category}
+      </span>
+    </span>
+    <h3 className="mt-[1px] whitespace-pre-line text-[10px] lg:text-[14px] leading-[14px] text-[#1A2D5B]">
+      <span className="font-['DM_Sans'] font-semibold">{story.title}</span>
+    </h3>
+    {story.excerpt && (
+      <p className="text-[10px] lg:text-[14px] leading-[14px] text-[#1A2D5B]/70">
+        <span className="font-['DM_Sans']">{story.excerpt}</span>
+      </p>
+    )}
+  </Link>
 );
 
-const BlogPostPage = () => {
-  const navigate = useNavigate();
+const BlogPostPage = () => (
+  <>
+    <Navbar />
+    <main className="overflow-hidden bg-[#FDFADC] text-[#1A2D5B]">
+      <section className="relative h-[420px] overflow-hidden bg-[#FDFADC] sm:h-[500px] lg:h-[537px]">
+        <img
+          src={heroImage}
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover mix-blend-multiply"
+        />
+        <div className="absolute inset-0 opacity-[0.92]" aria-hidden="true">
+          <div
+            className="absolute rounded-full bg-[#1A2D5B]/[0.37] blur-[90px]"
+            style={{ left: 389, top: -45, width: 988, height: 602 }}
+          />
+          <div
+            className="absolute rounded-full bg-[#03102E]/[0.71] blur-[82px]"
+            style={{ left: -138, top: -101, width: 942, height: 729 }}
+          />
+        </div>
+        <div className="relative z-10 flex h-full items-end px-5 pb-[70px] sm:px-[5vw] lg:pb-[140px]">
+          <h1 className="m-0  text-[26px] leading-[32px] text-white sm:text-[29px] sm:leading-[36px] lg:text-[31px] lg:leading-[38px]">
+            <span className="font-['DM_Sans'] font-bold">
+              <span className="block">Postman Made Simple #5 :</span>
+              <span className="block">Today's Analogy: Sending a Letter 📩</span>
+            </span>
+          </h1>
+        </div>
+      </section>
 
-  const goToContact = () => {
-    navigate("/contact");
-  };
+      <section className="px-5 pb-[64px] pt-[56px] sm:px-8 lg:px-0 lg:pt-[96px]">
+        <div className="mx-auto grid w-full max-w-[980px] grid-cols-1 gap-12 lg:grid-cols-2 lg:items-start lg:gap-x-[80px]">
+          <aside className="mx-auto w-full max-w-[480px] bg-[#FAFAFA] px-4 pb-[53px] pt-[42px] lg:order-1 lg:mx-0">
+            <div className="bg-[#F8F4D4] px-4 pb-[58px] pt-[36px]">
+              <span className="flex h-[19px] w-fit items-center rounded-full bg-white/25 px-[10px]">
+                <span className="font-['DM_Sans'] text-[9px] font-semibold uppercase leading-none tracking-[0.08em] text-[#964A21]">
+                  Related stories
+                </span>
+              </span>
+              <h2 className="mt-[10px] text-[30px] leading-[38px] text-[#1A2D5B]">
+                <span className="font-['DM_Sans'] font-semibold">
+                  <span className="block">More stories</span>
+                  <span className="block">like this</span>
+                </span>
+              </h2>
+            </div>
 
-  const goToBlog = () => {
-    if (document.getElementById("blog")) {
-      document.getElementById("blog").scrollIntoView({ behavior: "smooth" });
-      return;
-    }
-    navigate("/");
-    window.setTimeout(() => {
-      document.getElementById("blog")?.scrollIntoView({ behavior: "smooth" });
-    }, 100);
-  };
+            <div className="mt-[59px] space-y-[18px]">
+              {relatedStories.map((story) => (
+                <RelatedCard key={story.title} story={story} />
+              ))}
+            </div>
+          </aside>
 
-  return (
-    <>
-      <Navbar />
-      <main className="overflow-hidden bg-light-brown text-dark-brown">
-        <section className="px-5 pb-[46px] pt-12 md:px-[4vw] md:pt-[57px]">
-          <div className="grid gap-12 lg:grid-cols-[200px_minmax(0,1fr)_240px] lg:items-start lg:gap-x-[68px]">
-            <nav aria-label="Article contents" className="block">
-              <p className="text-[10px] font-semibold uppercase leading-none tracking-[0.14em] text-dark-brown">
-                <span className="font-['DM_Sans'] font-semibold">Contents</span>
+          <article className="order-1 lg:order-2 ">
+            <header>
+              <h1 className="m-0 text-[29px] leading-[34px] text-[#132247]">
+                <span className="font-['DM_Sans'] font-semibold">
+                  Postman Made Simple #5
+                </span>
+              </h1>
+              <p className="mt-[22px] text-[16px] leading-[24px] text-[#1A2D5B]">
+                <span className="font-['DM_Sans'] font-medium">
+                  Headers Aren't as Complicated as They Sound
+                </span>
               </p>
-              <ul className="mt-[15px] flex flex-wrap gap-x-6 gap-y-3 text-[13px] leading-[14px] lg:block lg:space-y-[13px]">
-                {contents.map(([label, id], index) => (
-                  <li key={id}>
-                    <a
-                      href={`#${id}`}
-                      className={`text-[13px] leading-[14px] ${
-                        index === 0 ? "text-accent-brown" : "text-dark-brown/70"
-                      }`}
-                    >
-                      <span className="font-['DM_Sans']">{label}</span>
-                    </a>
+              <p className="m-0 text-[16px] leading-[24px] text-[#1A2D5B]">
+                <span className="font-['DM_Sans'] font-medium">
+                  Today's Analogy: Sending a Letter 📩
+                </span>
+              </p>
+            </header>
+
+            <div className="mt-[22px]">
+              {bodyParagraphs.map((text) => (
+                <Body key={text}>{text}</Body>
+              ))}
+
+              <ul className="m-0 list-none p-0">
+                {bullets.map(([icon, label, quote]) => (
+                  <li key={label}>
+                    <p className="m-0 text-[16px] leading-[24px] text-[#1A2D5B]">
+                      <span className="font-['DM_Sans']">
+                        <span className="mr-[4px]">{icon}</span>
+                        {label} &rarr; {quote}
+                      </span>
+                    </p>
                   </li>
                 ))}
               </ul>
-            </nav>
 
-            <article id="where-load-tests-lie" className="max-w-[663px] scroll-mt-28">
-              <div className="flex flex-wrap items-center gap-x-[14px] gap-y-3">
-                <span className="inline-flex h-[22px] w-[108px] items-center justify-center bg-dark-brown text-[10px] font-semibold uppercase leading-none tracking-[0.14em] text-light-brown">
-                  <span className="font-['DM_Sans'] font-semibold">Performance</span>
-                </span>
-                <span className="text-[11px] leading-none text-dark-brown/55">
-                  <span className="font-['DM_Sans']">7 min read &middot; 12 August 2026</span>
-                </span>
-              </div>
+              {afterBulletsParagraphs.map((text) => (
+                <Body key={text}>{text}</Body>
+              ))}
 
-              <h1 className="mt-[24px] text-[52px] leading-[0.94] text-dark-brown sm:text-[64px] sm:leading-[58px]">
-                <span className="font-['Barlow_Condensed'] font-bold uppercase tracking-[0.005em]">
-                  <span className="block">Postman Made Simple #5 :</span>
-                  <span className="block">Today's Analogy: Sending a Letter 📩</span>
-                </span>
-              </h1>
-
-              <div className="mt-[20px] max-w-[663px] text-[18px] leading-[31px] text-dark-brown/85 sm:text-[20px]">
-                <span className="font-['DM_Sans']">
-                  <span className="block">Headers Aren't as Complicated as They Sound</span>
-                  <span className="block">Today's Analogy: Sending a Letter 📩</span>
-                </span>
-              </div>
-
-              <div className="mt-[22px] h-[2px] w-[64px] bg-accent-brown" aria-hidden="true" />
-
-              <img src={detailOne} alt="" className="mt-[52px] h-auto w-full rounded-[4px]" />
-              <div className="mt-[52px]">
-                <Heading id="the-letter">Think about sending a letter.</Heading>
-                <Body>
-                  Last time, we talked about HTTP methods using a restaurant analogy. This week, let's keep the conversation going.
-                </Body>
-                <Body>The body is the actual letter. It contains the message you want to communicate. But the envelope carries additional information about the letter and how it should be handled. That's essentially what HTTP headers do.</Body>
-                <img src={detailTwo} alt="" className="mt-[32px] h-auto w-full rounded-[4px]" />
-                <Heading id="the-headers" className="mt-[52px]">The headers</Heading>
-                <Body>👤 Authorization → "Here's my ID. I'm allowed to be here."</Body>
-                <Body>📦 Content Type → "This is what's inside the envelope."</Body>
-                <Body>📬 Accept → "This is the kind of response I'd like back."</Body>
-                <Heading id="request-response" className="mt-[52px]">Request and response</Heading>
-                <Body>Communication usually goes both ways. You send a request, and you expect a response in return. Interestingly, both can have a body and headers.</Body>
-                <Body>The request body contains what you're sending to the server, while request headers provide additional information about how the server should process it.</Body>
-                <Body>The response body contains what the server sends back, while response headers provide additional information about that response.</Body>
-                <Body>And to our Jedi younglings currently going through the ongoing Test-Jedi cohort, I hope this makes the whole headers conversation a little easier to understand. 😊</Body>
-                <img src={detailThree} alt="" className="mt-[32px] h-auto w-full rounded-[4px]" />
-                <Heading id="the-takeaway" className="mt-[52px]">The takeaway</Heading>
-                <Body>When you're working with an API, remember: Body = The message. Headers = Extra information about how the message should be handled.</Body>
-                <Body>The next time you see a bunch of headers in Postman, don't let them intimidate you. 😄 They're basically the information written on the envelope.</Body>
-                <Body>And just like you wouldn't send a letter without an address on the envelope, an API request sometimes needs its headers to know exactly what to do with your message.</Body>
-                <Body>Class dismissed. See you next week. 😄</Body>
-                <img src={detailFour} alt="" className="mt-[32px] h-auto w-full rounded-[4px]" />
-              </div>
-            </article>
-
-            <aside className="w-full lg:w-[240px]">
-              <div className="bg-medium-brown px-[23px] pb-[22px] pt-[24px]">
-                <p className="text-[20px] leading-[19px] text-dark-brown">
-                  <span className="font-['Barlow_Condensed'] font-bold uppercase">
-                    <span className="block">Need a performance</span>
-                    <span className="block">pass?</span>
-                  </span>
-                </p>
-                <p className="mt-[14px] text-[14px] leading-[20px] text-dark-brown">
-                  <span className="font-['DM_Sans']">
-                    Send us the build and the peak you&rsquo;re planning for.
-                  </span>
-                </p>
-                <button
-                  type="button"
-                  onClick={goToContact}
-                  className="mt-[15px] h-[38px] w-full bg-accent-brown text-[13px] leading-none text-light-brown sm:w-[196px]"
+              {closingParagraphs.map((text) => (
+                <Body
+                  key={text}
+                  className={
+                    text.startsWith("And just like you")
+                      ? "max-w-[630px]"
+                      : "max-w-[626px]"
+                  }
                 >
-                  <span className="font-['DM_Sans']">Propose a project</span>
-                </button>
-              </div>
+                  {text}
+                </Body>
+              ))}
+            </div>
 
-              <div className="mt-[21px] h-px w-full bg-dark-brown" aria-hidden="true" />
-
-              <p className="mt-[17px] text-[10px] font-semibold uppercase leading-none tracking-[0.14em] text-dark-brown">
-                <span className="font-['DM_Sans'] font-semibold">Next</span>
-              </p>
-              <div className="mt-[11px] flex flex-col gap-[12px]">
-                {nextPosts.map((title) => (
-                  <button
-                    key={title}
-                    type="button"
-                    onClick={goToBlog}
-                    className="max-w-[240px] text-left text-[15px] leading-[18px] text-dark-brown hover:underline hover:underline-offset-4"
-                  >
-                    <span className="font-['DM_Sans']">{title}</span>
-                  </button>
-                ))}
-              </div>
-            </aside>
-          </div>
-        </section>
-      </main>
-      <Footer />
-    </>
-  );
-};
+            <div className="mt-[64px] lg:space-y-[76px]">
+              {storyImages.map((image, index) => (
+                <img
+                  key={index}
+                  src={image}
+                  alt=""
+                  loading="lazy"
+                  className="h-[388px] w-full rounded-[12px] object-fill"
+                />
+              ))}
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+    <Footer />
+  </>
+);
 
 export default BlogPostPage;

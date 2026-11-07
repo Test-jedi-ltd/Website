@@ -47,7 +47,7 @@ const Navbar = () => {
   };
 
   const navLinkClass = (active) =>
-    `text-[13px] lg:text-[14px] font-normal leading-none ${active ? "text-accent-brown" : "text-dark-brown"}`;
+    `text-[13px] lg:text-[16px] font-normal leading-none ${active ? "text-accent-brown" : "text-dark-brown"}`;
 
   const goToContact = () => {
     setOpen(false);
@@ -65,6 +65,7 @@ const Navbar = () => {
           <img src={logo} alt="Test-Jedi" className="h-auto w-[92px] sm:w-[110px] lg:w-[129px]" />
         </button>
         <nav className="hidden lg:flex gap-[31px] justify-self-center relative -top-[3px]" aria-label="Main navigation">
+          <button className={navLinkClass(pathname === "/home")} onClick={goHome} aria-current={pathname === "/home" ? "page" : undefined}>{labelConfig.navbarHome}</button>
           <button className={navLinkClass(pathname === "/services")} onClick={goToServices} aria-current={pathname === "/services" ? "page" : undefined}>{labelConfig.navbarServices}</button>
           <button className={navLinkClass(pathname === "/careers")} onClick={goToCareers} aria-current={pathname === "/careers" ? "page" : undefined}>{labelConfig.navbarCohorts}</button>
           <button className={navLinkClass(pathname.startsWith("/blog"))} onClick={goToBlog} aria-current={pathname.startsWith("/blog") ? "page" : undefined}>{labelConfig.navbarBlog}</button>

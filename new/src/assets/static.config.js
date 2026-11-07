@@ -80,6 +80,7 @@ export const labelConfig = {
   excellence: "Excellence",
   empowering: "Empowering",
   navbarServices: "Services",
+  navbarHome: "Home",
   navbarCaseStudies: "Case Studies",
   navbarCohorts: "Cohorts",
   navbarBlog: "Blog",
