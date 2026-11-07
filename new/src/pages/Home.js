@@ -3,7 +3,6 @@ import Hero from '../sections/Hero'
 import Services from '../sections/Services'
 import Mission from '../sections/Mission'
 import CaseStudy from '../sections/CaseStudy'
-import Blog from '../sections/Blog'
 import Footer from '../sections/Footer'
 
 const Home = () => {
@@ -14,7 +13,6 @@ const Home = () => {
       <Services />
       <Mission />
       <CaseStudy />
-      <Blog />
       <Footer />
     </>
   )

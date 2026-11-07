@@ -89,16 +89,16 @@ const ContactForm = () => (
 
 const NextSteps = () => (
   <div className="min-h-[241px] bg-dark-brown px-[28px] pb-[26px] pt-[29px]">
-    <p className="text-[10px] font-semibold uppercase leading-none tracking-[0.14em] text-medium-brown">
+    <p className="text-[10px] lg:text-[12px] font-semibold uppercase leading-none tracking-[0.14em] text-medium-brown">
       <span className="font-['DM_Sans'] font-semibold">What happens next</span>
     </p>
     <div className="mt-[15px] space-y-[14px]">
       {steps.map((step, index) => (
-        <div key={step} className="grid grid-cols-[14px_minmax(0,1fr)] gap-x-[24px]">
+        <div key={step} className="grid grid-cols-[14px_minmax(0,1fr)] gap-x-[32px]">
           <span className="mt-1 text-[14px] font-bold leading-none text-accent-brown">
             <span className="font-['DM_Sans']">{`0${index + 1}`}</span>
           </span>
-          <p className="max-w-[300px] text-[14px] lg:text-[16px] leading-[22px] text-light-brown">
+          <p className="max-w-[579px] text-[14px] lg:text-[18px] leading-[22px] text-light-brown">
             <span className="font-['DM_Sans']">{step}</span>
           </p>
         </div>
@@ -109,12 +109,12 @@ const NextSteps = () => (
 
 const ContactDetails = () => (
   <div className="mt-[23px] min-h-[220px] border border-dark-brown bg-white px-[28px] pb-[24px] pt-[27px]">
-    <p className="text-[10px] font-semibold uppercase leading-none tracking-[0.14em] text-dark-brown">
+    <p className="text-[10px] lg:text-[12px] font-semibold uppercase leading-none tracking-[0.14em] text-dark-brown">
       <span className="font-['DM_Sans'] font-semibold">Direct</span>
     </p>
     <div className="mt-[19px] space-y-[18px]">
       <div>
-        <p className="text-[10px] font-semibold uppercase leading-none tracking-[0.14em] text-dark-brown">
+        <p className="text-[10px] lg:text-[12px] font-semibold uppercase leading-none tracking-[0.14em] text-dark-brown">
           <span className="font-['DM_Sans'] font-semibold">Email</span>
         </p>
         <a href="mailto:operations@test-jedi.com" className="mt-[7px] block text-[15px] lg:text-[16px] leading-none text-dark-brown">
@@ -122,7 +122,7 @@ const ContactDetails = () => (
         </a>
       </div>
       <div>
-        <p className="text-[10px] font-semibold uppercase leading-none tracking-[0.14em] text-dark-brown">
+        <p className="text-[10px] lg:text-[12px] font-semibold uppercase leading-none tracking-[0.14em] text-dark-brown">
           <span className="font-['DM_Sans'] font-semibold">Phone</span>
         </p>
         <a href="tel:+2347010621362" className="mt-[7px] block text-[15px] lg:text-[16px]  leading-none text-dark-brown">
@@ -130,7 +130,7 @@ const ContactDetails = () => (
         </a>
       </div>
       <div>
-        <p className="text-[10px] font-semibold uppercase leading-none tracking-[0.14em] text-dark-brown">
+        <p className="text-[10px] lg:text-[12px] font-semibold uppercase leading-none tracking-[0.14em] text-dark-brown">
           <span className="font-['DM_Sans'] font-semibold">Hours</span>
         </p>
         <p className="mt-[7px] text-[15px] lg:text-[16px] leading-none text-dark-brown">
@@ -148,7 +148,7 @@ const Testimonial = () => (
         &ldquo;They replied with a plan, not a sales call. We started four days later.&rdquo;
       </span>
     </blockquote>
-    <figcaption className="mt-[12px] text-[10px] font-semibold uppercase leading-none tracking-[0.14em] text-[#645A6D]">
+    <figcaption className="mt-[12px] text-[10px] lg:text-[12px] font-semibold uppercase leading-none tracking-[0.14em] text-[#645A6D]">
       <span className="font-['DM_Sans'] font-semibold">
         Head of engineering &middot; Logistics platform
       </span>
@@ -163,13 +163,13 @@ const ContactSection = () => (
         <p className="text-[12px] font-semibold uppercase leading-none tracking-[0.14em] text-accent-brown">
           <span className="font-['DM_Sans'] font-semibold">Propose a project</span>
         </p>
-        <h2 className="mt-[16px] text-[46px] leading-[44px] tracking-[0.015em] text-dark-brown sm:text-[56px] sm:leading-[53px] lg:text-[64px] lg:leading-[60px]">
-          <span className="font-['Barlow_Condensed'] font-bold uppercase">
+        <h2 className="mt-[16px] text-[46px] leading-[44px] tracking-[0.015em] text-dark-brown sm:text-[56px] sm:leading-[53px] lg:text-[80px] lg:leading-[60px]">
+          <span className="font-['Barlow_Condensed'] font-bold uppercase flex flex-col gap-4">
             <span className="block">Tell us the scope</span>
             <span className="block">and the deadline</span>
           </span>
         </h2>
-        <p className="mt-[15px] max-w-[479px] text-[16px] leading-[26px] text-dark-brown">
+        <p className="mt-[15px] max-w-[579px] text-[16px] lg:text-[20px] leading-[26px] text-dark-brown">
           <span className="font-['DM_Sans']">
             We reply within two working days with a test plan, a team shape and a price. No
             discovery call required first.
