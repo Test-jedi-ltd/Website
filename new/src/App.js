@@ -1,12 +1,11 @@
 import { lazy, Suspense } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { AuthProvider } from "./admin/AuthContext";
 import "./admin/admin.css";
 import ScrollToTop from "./components/ScrollToTop";
 import Home from "./pages/Home";
 import ServicesPage from "./pages/Services";
 import BlogPage from "./pages/Blog";
-import BlogPostPage from "./pages/BlogPost";
 import BlogPostDetail from "./components/BlogPostDetail";
 import ContactPage from "./pages/Contact";
 import CareersPage from "./pages/Careers";
@@ -43,7 +42,15 @@ function App() {
             <Route path="/services" element={<ServicesPage />} />
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/blog/:slug" element={<BlogPostDetail />} />
-            <Route path="/postman-made-simple-5-todays-analogy-sending-a-letter" element={<BlogPostPage />} />
+            <Route
+              path="/postman-made-simple-5-todays-analogy-sending-a-letter"
+              element={
+                <Navigate
+                  to="/blog/postman-made-simple-5-todays-analogy-sending-a-letter"
+                  replace
+                />
+              }
+            />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/careers" element={<CareersPage />} />
 
