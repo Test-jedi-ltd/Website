@@ -1,10 +1,17 @@
+import "@testing-library/jest-dom"
 import { render, screen, waitFor } from "@testing-library/react"
-import { MemoryRouter } from "react-router-dom"
 import BlogPage from "../Blog"
 import { getBlogPosts } from "../../lib/firestore"
 
 jest.mock("../../sections/Navbar", () => () => <nav>Site navigation</nav>)
 jest.mock("../../sections/Footer", () => () => <footer>Site footer</footer>)
+jest.mock("react-router-dom", () => ({
+  Link: ({ to, children, ...props }) => (
+    <a href={to} {...props}>
+      {children}
+    </a>
+  ),
+}))
 jest.mock("../../lib/firestore", () => ({
   getBlogPosts: jest.fn(),
 }))
@@ -33,11 +40,7 @@ describe("BlogPage", () => {
       },
     ])
 
-    render(
-      <MemoryRouter>
-        <BlogPage />
-      </MemoryRouter>
-    )
+    render(<BlogPage />)
 
     await waitFor(() => {
       expect(screen.getByRole("link", { name: /Featured article/ })).toHaveAttribute(
@@ -57,11 +60,7 @@ describe("BlogPage", () => {
 
   it("shows a clear empty state when no public posts exist", async () => {
     getBlogPosts.mockResolvedValue([])
-    render(
-      <MemoryRouter>
-        <BlogPage />
-      </MemoryRouter>
-    )
+    render(<BlogPage />)
 
     expect(await screen.findByText("No articles are available yet.")).toBeInTheDocument()
   })
