@@ -55,7 +55,7 @@ const Footer = ({ hideCta = false }) => (
           <img
             src={footerLogo}
             alt="Test-Jedi"
-            className="mt-[11px] h-auto w-[120px] lg:w-[142px]"
+            className="mt-[11px] h-auto w-[104px] lg:w-[132px]"
           />
           <p className="mt-[26px] max-w-[400px] leading-[21px] text-[#9E8F90]">
             <span className="font-['DM_Sans']">

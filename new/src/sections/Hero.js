@@ -53,7 +53,7 @@ const Hero = () => {
       </div>
       <div className="flex gap-10 sm:gap-[50px] md:gap-[70px] mt-6 sm:mt-[38px] text-dark-brown">
         <div className="flex flex-col">
-          <strong className="text-[28px] sm:text-2xl md:text-5xl font-['Barlow_Condensed'] font-bold leading-none">
+          <strong className="text-5xl md:text-7xl font-['Barlow_Condensed'] font-bold leading-none">
             <span>{labelConfig.yearsExperience}</span>
             <small className="text-accent-brown">{labelConfig.yearsExperienceUnit}</small>
           </strong>
@@ -62,7 +62,7 @@ const Hero = () => {
           </span>
         </div>
         <div className="flex flex-col">
-          <strong className="text-[28px] sm:text-2xl md:text-5xl font-['Barlow_Condensed'] font-bold leading-none">
+          <strong className="text-5xl md:text-7xl font-['Barlow_Condensed'] font-bold leading-none">
             <span >
               {labelConfig.testersAvailable}
             </span>

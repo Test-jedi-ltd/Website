@@ -1,70 +1,177 @@
-# Getting Started with Create React App
+# Test-Jedi Website
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+React website with a public marketing site and a Firebase-backed admin dashboard.
 
-## Available Scripts
+## Structure
 
-In the project directory, you can run:
+```
+Website/
+├─ new/                  # The single application (Create React App)
+│  ├─ public/
+│  ├─ src/
+│  │  ├─ admin/          # Admin dashboard (shell, pages, components)
+│  │  ├─ assets/
+│  │  ├─ components/
+│  │  ├─ firebase/       # Firebase config + initialized services
+│  │  ├─ lib/            # Shared data services (Firestore CRUD)
+│  │  ├─ pages/
+│  │  ├─ sections/
+│  │  ├─ App.js
+│  │  ├─ index.js
+│  │  └─ index.css
+│  ├─ package.json
+│  └─ tailwind.config.js
+├─ vercel.json           # Deploys the `new/` app
+└─ README.md
+```
 
-### `npm start`
+All application code and dependencies live inside `new/`.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Development
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+```bash
+cd new
+npm install
+npm run dev
+```
 
-### `npm test`
+The app runs at http://localhost:3000.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Build
 
-### `npm run build`
+```bash
+cd new
+npm run build
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Output is written to `new/build`.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Configuration
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Firebase config is read from `REACT_APP_FIREBASE_*` environment variables (see
+`new/.env.example`). Copy it to `new/.env` to override the built-in fallbacks:
 
-### `npm run eject`
+```bash
+cd new
+cp .env.example .env
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Firebase setup
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+1. Enable **Email/Password** in Firebase Authentication.
+2. Create the admin user (or use an existing account).
+3. Grant the admin custom claim. Either use the tool script:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+   ```bash
+   cd new/tools
+   npm install
+   GOOGLE_APPLICATION_CREDENTIALS=/path/to/service-account.json \
+     npm run set-admin -- admin@example.com admin
+   ```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+   Or run this in Google Cloud Shell:
 
-## Learn More
+   ```js
+   const admin = require("firebase-admin");
+   admin.initializeApp();
+   const user = await admin.auth().getUserByEmail("admin@example.com");
+   await admin.auth().setCustomUserClaims(user.uid, { role: "admin" });
+   ```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+4. Deploy the security rules:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+   ```bash
+   cd new
+   firebase deploy --only firestore:rules,storage
+   ```
 
-### Code Splitting
+   Rules files: `new/src/firebase/firestore.rules` and `new/storage.rules`.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+5. Create a Cloud Storage for Firebase bucket in **Firebase Console → Storage**
+   if one has not been created yet. Cloud Storage for Firebase now requires the
+   Blaze plan. Copy the bucket's exact name into
+   `REACT_APP_FIREBASE_STORAGE_BUCKET` in `new/.env` (for example,
+   `test-jedi-01.firebasestorage.app` for a new default bucket), then restart
+   the dev server or rebuild/redeploy the site. Deploy the Storage rules above
+   after creating the bucket.
 
-### Analyzing the Bundle Size
+   If browser uploads report a CORS preflight failure, first verify that the
+   configured bucket exists and the Firebase Storage API is enabled. Firebase's
+   Web SDK uses the Storage JSON API, which provides CORS responses by default;
+   a missing bucket or unavailable Storage service can instead return an error
+   response that the browser reports as a failed preflight.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## Admin
 
-### Making a Progressive Web App
+- Login: `/admin/login`
+- Dashboard: `/admin`
+- Blog management: `/admin/blog`
+- New post: `/admin/blog/new-post`
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+All `/admin/*` routes (except `/admin/login`) require a signed-in user whose
+token has `role: "admin"` (or `admin: true`). Unauthenticated visitors are
+redirected to the login page; authenticated non-admins see an access-denied
+screen. After a claim is granted, the user must sign out and back in (or use
+**Refresh access**) before it takes effect.
 
-### Advanced Configuration
+Public visitors can only read posts whose `status` is `"published"`.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## Admin features
 
-### Deployment
+- Email/password login gated by the `role: "admin"` custom claim.
+- Dashboard with real post counts, recent activity, loading skeletons, and empty states.
+- Blog list with 300 ms debounced search across title, excerpt, and stored `contentText`.
+- Create/edit form with slug uniqueness checks, split **Save Draft** / **Publish**
+  actions, publish confirmation, and toast feedback.
+- Rich-text editor with links, inline image uploads, and clear formatting.
+- Featured image upload with client-side compression, alt text, and removal.
+- Sanitized preview of unpublished posts at `/admin/blog/preview/:slug`.
+- Autosave to `localStorage` every 30 seconds with restore/discard on reopen.
+- Archive instead of hard delete; bulk publish/draft/archive actions.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## Performance
 
-### `npm run build` fails to minify
+Admin routes are lazy-loaded with `React.lazy` + `Suspense`, and post images use
+`loading="lazy"`. After R7 code-splitting, the initial main bundle dropped from
+**463.19 kB gzip** to **297.98 kB gzip**; the admin bundle loads on demand as a
+**153.55 kB gzip** chunk. Search is debounced by 300 ms. Firestore pagination
+(`limit` / `startAfter`) is deferred until post volume grows.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Decisions
+
+- JavaScript + JSDoc types (`new/src/lib/blogTypes.js`); no TypeScript migration.
+- Rendered post HTML must be sanitized with DOMPurify (Phase R4).
+- Images are compressed client-side before upload (Phase R3).
+- Deleting a post archives it (`status: "archived"`); no client hard deletes.
+- Search is client-side over `title`, `excerpt`, and stored `contentText` (Phase R2).
+- Slug uniqueness is enforced in the service layer (Phase R2).
+
+## Testing
+
+```bash
+cd new
+npm run test:ci
+```
+
+Unit tests cover `slugify`, error normalization, `isSlugUnique`, `searchPosts`,
+`getPostStats`, service-layer validation, and the autosave hook. `PostForm`
+component tests cover required fields, duplicate slugs, draft saves, and publish
+confirmation; `PostList` tests cover rendering, debounced search, status
+filtering, bulk publish, archive confirmation, and load errors.
+
+Not yet automated: Firebase Emulator CRUD integration and live auth/claim tests
+(they require the Firebase CLI and a real admin user).
+
+## Manual QA checklist
+
+- [ ] Signed out: `/admin`, `/admin/blog`, `/admin/blog/new-post` redirect to login.
+- [ ] Non-admin login: access denied; Firestore reads fail.
+- [ ] Admin login: dashboard stats load; sidebar links and sign-out work.
+- [ ] Duplicate slug: blocked with an inline message.
+- [ ] Inline images/links: render on `/blog/:slug`.
+- [ ] Large featured image: compressed and uploaded.
+- [ ] Unpublished preview: visible to admins, not public.
+- [ ] Publish: confirmation, success toast, `publishedAt` set, post appears publicly.
+- [ ] Unpublish/archive: confirmation, removed from public index, kept in admin.
+- [ ] Autosave: edit a draft, reload, restore prompt appears.
+- [ ] Bulk publish/draft/archive: selected posts update with toasts.
