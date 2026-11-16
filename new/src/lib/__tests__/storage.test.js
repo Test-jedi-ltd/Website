@@ -1,4 +1,3 @@
-jest.mock("browser-image-compression", () => jest.fn())
 jest.mock("../../firebase/admin", () => ({ storage: {} }))
 jest.mock("firebase/storage", () => ({
   ref: jest.fn((_storage, path) => ({ path })),
@@ -6,7 +5,6 @@ jest.mock("firebase/storage", () => ({
   getDownloadURL: jest.fn(),
 }))
 
-import imageCompression from "browser-image-compression"
 import {
   getDownloadURL,
   ref,
@@ -51,16 +49,16 @@ describe("uploadImage", () => {
         return unsubscribe
       }),
     }
-    imageCompression.mockImplementation(async (file) => file)
     uploadBytesResumable.mockReturnValue(task)
     getDownloadURL.mockResolvedValue("https://storage.example/cover.png")
   })
 
-  it("compresses without a remote worker and completes the Storage upload", async () => {
+  it("uploads the original file and completes the Storage upload", async () => {
     const file = makeFile("my cover.png")
     const onProgress = jest.fn()
     const onStage = jest.fn()
-    uploadBytesResumable.mockImplementation((_ref, _file, metadata) => {
+    uploadBytesResumable.mockImplementation((_ref, uploadedFile, metadata) => {
+      expect(uploadedFile).toBe(file)
       expect(metadata).toEqual({ contentType: "image/png" })
       return task
     })
@@ -68,11 +66,7 @@ describe("uploadImage", () => {
     const resultPromise = uploadImage(file, { onProgress, onStage })
     await waitFor(() => expect(uploadBytesResumable).toHaveBeenCalled())
 
-    expect(imageCompression).toHaveBeenCalledWith(
-      file,
-      expect.objectContaining({ useWebWorker: false })
-    )
-    expect(onStage.mock.calls).toEqual([["preparing"], ["uploading"]])
+    expect(onStage.mock.calls).toEqual([["uploading"]])
 
     callbacks.next({ bytesTransferred: 50, totalBytes: 100 })
     expect(onProgress).toHaveBeenCalledWith(50)

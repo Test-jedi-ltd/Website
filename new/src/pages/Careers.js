@@ -72,12 +72,12 @@ const CareersPage = () => {
           aria-hidden="true"
           className="pointer-events-none absolute left-0 top-0 hidden h-auto w-full lg:block"
         />
-        <div className="lg:py-10 relative grid gap-10 lg:grid-cols-[minmax(0,1fr)_809px] lg:items-start lg:gap-[60px]">
+        <div className="relative grid gap-10 py-10 xl:grid-cols-[minmax(0,1fr)_minmax(0,0.8fr)] xl:items-start xl:gap-[60px]">
           <div className="">
             <p className="text-[12px] lg:text-[16px] font-semibold uppercase leading-none tracking-[0.14em] text-accent-brown">
               <span className="font-['DM_Sans'] font-semibold">Cohort program</span>
             </p>
-            <h1 className="mt-[22px] text-[48px] leading-[0.88] text-dark-brown sm:text-[64px] md:text-[72px] lg:text-[100px] lg:leading-[68px]">
+            <h1 className="mt-[22px] text-[clamp(2.5rem,7vw,6.25rem)] leading-[0.88] text-dark-brown">
               <span className="font-['Barlow_Condensed'] font-bold uppercase flex flex-col gap-5">
                 <span className="block">Build a testing</span>
                 <span className="block">career, with</span>
@@ -85,7 +85,7 @@ const CareersPage = () => {
               </span>
             </h1>
           </div>
-          <p className=" text-[16px] leading-[25px] text-dark-brown/75 lg:mt-[144px] lg:translate-x-[29px] lg:justify-self-end lg:text-[20px]">
+          <p className="text-[16px] leading-[25px] text-dark-brown/75 xl:mt-[144px] xl:justify-self-end xl:text-[20px]">
             <span className="font-['DM_Sans']">
               Part of our mission is accessible QA expertise and transformative mentorship. Every
               tester here has a lead, a training track and a path off manual-only work.
@@ -126,7 +126,7 @@ const CareersPage = () => {
           {roles.map(([role, learn]) => (
             <div
               key={role}
-              className="grid gap-y-2 py-4 lg:py-10 lg:h-[100px] lg:grid-cols-[45%_minmax(0,1fr)] lg:items-center lg:py-0"
+              className="grid gap-y-2 py-4 lg:min-h-[100px] lg:grid-cols-[45%_minmax(0,1fr)] lg:items-center lg:py-4"
             >
               <p className="text-[30px] lg:text-[40px] leading-[0.97] text-dark-brown">
                 <span className="font-['Barlow_Condensed'] font-bold uppercase">{role}</span>

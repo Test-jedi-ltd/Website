@@ -1,0 +1,14 @@
+[
+  {
+    "origin": [
+      "http://localhost:3000",
+      "https://test-jedi-01.web.app",
+      "https://test-jedi-01.firebaseapp.com",
+      "https://test-jedi-nine.vercel.app",
+      "https://test-jedi.com"
+    ],
+    "method": ["GET", "HEAD"],
+    "responseHeader": ["Content-Type"],
+    "maxAgeSeconds": 3600
+  }
+]

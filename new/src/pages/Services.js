@@ -24,7 +24,7 @@ const Bullet = ({ children }) => (
 );
 
 const ServiceOne = () => (
-  <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_588px]  lg:items-center lg:gap-[56px]">
+  <div className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)] xl:items-center xl:gap-14">
     <div className="flex flex-col gap-5">
       <Eyebrow>01 Full-cycle testing</Eyebrow>
       <h2 className="mt-[12px] text-[40px] lg:text-[48px] leading-none text-dark-brown">
@@ -43,15 +43,15 @@ const ServiceOne = () => (
       </ul>
     </div>
     <div className="flex items-center justify-center">
-      <img src={serviceIllustrationOne} alt="Test automation pipeline" className="h-auto w-full lg:order-first" />
+      <img src={serviceIllustrationOne} alt="Test automation pipeline" className="h-auto w-full max-w-full xl:order-first" />
     </div>
   </div>
 );
 
 const ServiceTwo = () => (
-  <div className="mt-[99px] flex flex-col-reverse lg:grid gap-10 lg:grid-cols-[minmax(0,1fr)_988px]  lg:items-center lg:gap-[56px]">
+  <div className="mt-[99px] flex flex-col-reverse gap-10 xl:grid xl:grid-cols-[minmax(0,0.9fr)_minmax(0,1fr)] xl:items-center xl:gap-14">
     <div className="flex items-center justify-center lg:justify-start">
-      <img src={serviceIllustrationTwo} alt="Test automation pipeline" className="h-auto w-full lg:order-first" />
+      <img src={serviceIllustrationTwo} alt="Test automation pipeline" className="h-auto w-full max-w-full xl:order-first" />
     </div>
     <div className="flex flex-col gap-5">
       <Eyebrow>02 Test automation</Eyebrow>
@@ -78,8 +78,8 @@ const ServicesPage = () => (
     <Navbar />
     <main className="overflow-hidden bg-light-brown text-dark-brown">
       <section className="px-5 pb-[72px] pt-16 md:px-[4vw] md:pb-[100px] md:pt-[95px]">
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_588px] lg:items-end lg:gap-[80px] lg:py-10">
-          <h1 className="text-[48px] leading-[0.88] sm:text-[64px] md:text-[72px] lg:text-[100px] lg:leading-[68px]">
+        <div className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_minmax(0,0.8fr)] xl:items-end xl:gap-[clamp(2rem,5vw,5rem)] xl:py-10">
+          <h1 className="text-[clamp(2.5rem,7vw,6.25rem)] leading-[0.88]">
             <span className="font-['Barlow_Condensed'] font-bold uppercase flex flex-col gap-5">
               <span className="block">What we run,</span>
               <span className="block">and what you</span>

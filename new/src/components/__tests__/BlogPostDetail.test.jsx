@@ -26,6 +26,7 @@ describe("BlogPostDetail", () => {
       slug: "current-article",
       title: "Dynamic article title",
       excerpt: "Dynamic article summary",
+      featuredImage: "https://images.example/article.jpg",
       content: "<p>Dynamic article content.</p>",
       author: "Test Jedi",
       category: "API Testing",
@@ -58,6 +59,10 @@ describe("BlogPostDetail", () => {
     expect(screen.getByText("Dynamic article summary")).toBeInTheDocument()
     expect(screen.getByText("Dynamic article content.")).toBeInTheDocument()
     expect(screen.getByText("Related dynamic article")).toBeInTheDocument()
+    const featuredImage = screen.getByRole("img", { name: "Dynamic article title" })
+    expect(featuredImage).toHaveAttribute("src", "https://images.example/article.jpg")
+    expect(featuredImage).toHaveClass("h-full", "w-full", "object-cover", "object-center")
+    expect(featuredImage).not.toHaveClass("mix-blend-multiply")
     expect(screen.getByText("Site navigation")).toBeInTheDocument()
     expect(screen.getByText("Site footer")).toBeInTheDocument()
     expect(getBlogPostBySlug).toHaveBeenCalledWith("current-article")

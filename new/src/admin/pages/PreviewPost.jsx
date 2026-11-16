@@ -126,7 +126,7 @@ export default function PreviewPost() {
           src={post.featuredImage}
           alt={post.featuredImageAlt || post.title}
           loading="lazy"
-          className="w-full max-h-[420px] object-cover rounded-lg mb-8"
+          className="mb-8 h-auto max-h-[420px] w-full rounded-lg object-contain"
         />
       )}
 

@@ -32,7 +32,7 @@ const BlogCard = ({ post, fallbackImage }) => (
       src={post.featuredImage || fallbackImage}
       alt={post.featuredImage ? post.featuredImageAlt || post.title : ""}
       loading="lazy"
-      className="h-auto w-full rounded-[16px]"
+      className="aspect-[1.47/1] w-full rounded-[12px] bg-white object-cover ring-1 ring-inset ring-dark-brown/10"
     />
     <div className="mt-[16px] flex">
       <span className="inline-flex min-h-[24px] items-center rounded-full border-2 border-[#C4D5FF] px-[6px]">
@@ -62,9 +62,10 @@ const FeaturedPost = ({ post }) => (
     <img
       src={post.featuredImage || blogPost7}
       alt={post.featuredImage ? post.featuredImageAlt || post.title : ""}
-      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.01]"
+      fetchpriority="high"
+      className="absolute inset-0 h-full w-full object-cover object-center"
     />
-    <span className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.4)_0%,#132247_90.5%,#132247_100%)]" />
+    <span className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.4)_0%,rgba(19,34,71,0.72)_90.5%,#132247_100%)]" aria-hidden="true" />
     <span className="absolute inset-x-0 bottom-0 p-5 sm:p-6 lg:p-[34px]">
       <span className="inline-flex min-h-[22px] items-center rounded-full bg-white px-[10px] text-[11px] font-semibold uppercase text-[#1A2D5B]">
         {postCategory(post)}

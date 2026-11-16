@@ -1,12 +1,9 @@
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"
-import imageCompression from "browser-image-compression"
 import { storage } from "../firebase/admin"
 import { createAppError } from "./errors"
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/gif", "image/webp"]
 const MAX_SIZE = 5 * 1024 * 1024
-const TARGET_MAX_SIZE_MB = 1
-const MAX_DIMENSION = 1600
 const UPLOAD_STALL_TIMEOUT_MS = 60 * 1000
 
 /**
@@ -24,29 +21,13 @@ export const validateImageFile = (file) => {
   return null
 }
 
-const compressImage = async (file) => {
-  // GIF compression can break animations, so upload GIFs as-is.
-  if (file.type === "image/gif") return file
-
-  try {
-    return await imageCompression(file, {
-      maxSizeMB: TARGET_MAX_SIZE_MB,
-      maxWidthOrHeight: MAX_DIMENSION,
-      useWebWorker: false,
-    })
-  } catch (error) {
-    console.warn("Image compression failed; uploading original file.", error)
-    return file
-  }
-}
-
 /**
- * Validate, compress, and upload an image to Firebase Storage.
+ * Validate and upload the original image to Firebase Storage without recompression.
  *
  * @param {File} file
  * @param {{
  *   onProgress?: (percent: number) => void,
- *   onStage?: (stage: "preparing" | "uploading") => void
+ *   onStage?: (stage: "uploading") => void
  * }} [options]
  * @returns {Promise<{ url: string, size: number, name: string }>}
  */
@@ -56,16 +37,14 @@ export const uploadImage = async (file, { onProgress, onStage } = {}) => {
     throw createAppError("storage/invalid-file", validationError)
   }
 
-  if (onStage) onStage("preparing")
-  const compressed = await compressImage(file)
   const safeName = (file.name || "image").replace(/[^a-zA-Z0-9._-]/g, "-")
   const storageRef = ref(storage, `blog-posts/${Date.now()}-${safeName}`)
 
   if (onStage) onStage("uploading")
 
   return new Promise((resolve, reject) => {
-    const task = uploadBytesResumable(storageRef, compressed, {
-      contentType: compressed.type || file.type,
+    const task = uploadBytesResumable(storageRef, file, {
+      contentType: file.type,
     })
     let settled = false
     let timeoutId
@@ -113,7 +92,7 @@ export const uploadImage = async (file, { onProgress, onStage } = {}) => {
           if (settled) return
           settled = true
           cleanup()
-          resolve({ url, size: compressed.size, name: safeName })
+          resolve({ url, size: file.size, name: safeName })
         } catch (error) {
           fail(error)
         }

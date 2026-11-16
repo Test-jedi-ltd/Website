@@ -157,7 +157,7 @@ const Testimonial = () => (
 );
 
 const ContactSection = () => (
-  <section id="contact" className="border-t border-dark-brown px-5 pb-[58px] pt-[54px] md:px-[4vw]">
+  <section id="contact" className="border-t border-[rgba(21,18,64,0.14)] px-5 pb-[58px] pt-[54px] md:px-[4vw]">
     <div className="lg:grid lg:grid-cols-2 lg:justify-between lg:gap-12">
       <div className="flex flex-col gap-5">
         <p className="text-[12px] font-semibold uppercase leading-none tracking-[0.14em] text-accent-brown">

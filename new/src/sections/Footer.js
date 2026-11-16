@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import footerLogo from "../assets/footer-logo.svg";
+import { labelConfig } from "../assets/static.config";
 
 const services = [
   ["Full-cycle testing", "#services"],
@@ -15,8 +16,8 @@ const company = [
 ];
 
 const contact = [
-  ["hello@test-jedi.com", "mailto:hello@test-jedi.com"],
-  ["+234 806 726 8511", "tel:+2348067268511"],
+  [labelConfig.testJediEmail, `mailto:${labelConfig.testJediEmail}`],
+  [labelConfig.testJediPhone, "tel:+2347010621362"],
   ["Propose a project", "/contact"],
 ];
 

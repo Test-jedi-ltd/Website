@@ -1,52 +1,69 @@
 import { useRef, useState } from "react"
 import { Icon } from "@iconify/react"
-import { uploadImage, formatFileSize } from "../../lib/storage"
+import { formatFileSize, uploadImage, validateImageFile } from "../../lib/storage"
 import { getErrorMessage } from "../../lib/errors"
+import ImageEditor from "./ImageEditor"
 
 const ImageUpload = ({ url = "", alt = "", onUpload, onRemove, onAltChange }) => {
   const inputRef = useRef(null)
   const [progress, setProgress] = useState(0)
   const [uploading, setUploading] = useState(false)
-  const [uploadStage, setUploadStage] = useState(null)
   const [error, setError] = useState(null)
   const [dragOver, setDragOver] = useState(false)
   const [fileInfo, setFileInfo] = useState(null)
+  const [editorFile, setEditorFile] = useState(null)
 
   const uploadFile = async (file) => {
     if (!file || uploading) return
 
     setError(null)
     setUploading(true)
-    setUploadStage("preparing")
     setProgress(0)
 
     try {
       const result = await uploadImage(file, {
         onProgress: setProgress,
-        onStage: setUploadStage,
       })
       setProgress(100)
-      setFileInfo({ size: result.size, originalSize: file.size })
+      setFileInfo({ size: result.size })
       if (onUpload) onUpload(result.url)
     } catch (err) {
       console.error("Image upload error:", err)
       setError(getErrorMessage(err, "Upload failed. Please try again."))
     } finally {
       setUploading(false)
-      setUploadStage(null)
     }
   }
 
   const handleFileChange = (e) => {
     const file = e.target.files && e.target.files[0]
     e.target.value = ""
-    uploadFile(file)
+    if (!file) return
+
+    const validationError = validateImageFile(file)
+    if (validationError) {
+      setError(validationError)
+      return
+    }
+
+    setError(null)
+    setEditorFile(file)
   }
 
   const handleDrop = (e) => {
     e.preventDefault()
     setDragOver(false)
-    uploadFile(e.dataTransfer.files && e.dataTransfer.files[0])
+    const file = e.dataTransfer.files && e.dataTransfer.files[0]
+    if (!file) return
+
+    const validationError = validateImageFile(file)
+    if (validationError) {
+      setError(validationError)
+      return
+    }
+
+    setError(null)
+    setEditorFile(file)
   }
 
   const openFilePicker = () => {
@@ -62,13 +79,66 @@ const ImageUpload = ({ url = "", alt = "", onUpload, onRemove, onAltChange }) =>
     if (onRemove) onRemove()
   }
 
-  const compressionNote =
-    fileInfo && fileInfo.originalSize > fileInfo.size
-      ? ` (compressed from ${formatFileSize(fileInfo.originalSize)})`
-      : ""
+  const handleApplyEdits = (file) => {
+    const validationError = validateImageFile(file)
+    if (validationError) {
+      setError(validationError)
+      return false
+    }
+
+    setEditorFile(null)
+    uploadFile(file)
+    return true
+  }
+
+  const editUploadedImage = async () => {
+    if (!url || uploading) return
+
+    setError(null)
+    try {
+      const response = await fetch(url)
+      if (!response.ok) {
+        throw new Error(`Image download failed with status ${response.status}.`)
+      }
+
+      const blob = await response.blob()
+      const type = blob.type.split(";")[0] || "image/png"
+      const extension = {
+        "image/jpeg": "jpg",
+        "image/png": "png",
+        "image/gif": "gif",
+        "image/webp": "webp",
+      }[type]
+      if (!extension) {
+        throw new Error("This uploaded image format cannot be edited.")
+      }
+
+      const file = new File([blob], `featured-image.${extension}`, { type })
+      const validationError = validateImageFile(file)
+      if (validationError) {
+        throw new Error(validationError)
+      }
+      setEditorFile(file)
+    } catch (editError) {
+      console.error("Image download for editing failed:", editError)
+      setError(
+        getErrorMessage(
+          editError,
+          "Unable to load this uploaded image for editing. Try uploading it again."
+        )
+      )
+    }
+  }
 
   return (
     <div>
+      {editorFile && (
+        <ImageEditor
+          file={editorFile}
+          onApply={handleApplyEdits}
+          onCancel={() => setEditorFile(null)}
+        />
+      )}
       <label className="block text-sm font-medium mb-2">Featured Image</label>
       <input
         ref={inputRef}
@@ -122,10 +192,22 @@ const ImageUpload = ({ url = "", alt = "", onUpload, onRemove, onAltChange }) =>
                 ? "Uploading replacement..."
                 : "Click or drop another image to replace"}
             </span>
+            {!uploading && (
+              <button
+                type="button"
+                onClick={(event) => {
+                  event.stopPropagation()
+                  editUploadedImage()
+                }}
+                onKeyDown={(event) => event.stopPropagation()}
+                className="mt-2 block w-full text-center text-[12px] font-semibold text-[#964A21] underline hover:text-[#7D3D1B]"
+              >
+                Edit uploaded image
+              </button>
+            )}
             {fileInfo && (
               <span className="block mt-1 text-[11px] text-[#645F70]">
                 {formatFileSize(fileInfo.size)}
-                {compressionNote}
               </span>
             )}
           </div>
@@ -137,19 +219,17 @@ const ImageUpload = ({ url = "", alt = "", onUpload, onRemove, onAltChange }) =>
             />
             <span className="mt-2 text-[13px] text-[#151240]">
               {uploading
-                ? uploadStage === "preparing"
-                  ? "Preparing image..."
-                  : "Uploading image..."
+                ? "Uploading image..."
                 : "Click or drag an image here"}
             </span>
             <span className="mt-1 text-[11px] text-[#645F70]">
-              JPG, PNG, GIF, or WebP. Max 5MB. Large images are compressed automatically.
+              JPG, PNG, GIF, or WebP. Max 5MB. Edit the image before it uploads.
             </span>
           </>
         )}
       </div>
 
-      {uploading && uploadStage === "uploading" && progress > 0 && progress < 100 && (
+      {uploading && progress > 0 && progress < 100 && (
         <div className="mt-2">
           <div className="h-2 rounded bg-[#E8E0D4] overflow-hidden">
             <div

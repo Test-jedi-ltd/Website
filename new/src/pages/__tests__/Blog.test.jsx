@@ -36,6 +36,7 @@ describe("BlogPage", () => {
         slug: "another-article",
         title: "Another article",
         excerpt: "An article excerpt",
+        featuredImage: "https://images.example/article.jpg",
         status: "published",
       },
     ])
@@ -52,7 +53,14 @@ describe("BlogPage", () => {
       "href",
       "/blog/another-article"
     )
+    expect(screen.getByRole("img", { name: "Another article" })).toHaveClass(
+      "aspect-[1.47/1]",
+      "object-cover"
+    )
     expect(screen.getByText("An article excerpt")).toBeInTheDocument()
+    const featuredImage = screen.getByRole("img", { name: "Featured article" })
+    expect(featuredImage).toHaveAttribute("src", "https://images.example/featured.jpg")
+    expect(featuredImage).toHaveClass("h-full", "w-full", "object-cover", "object-center")
     expect(screen.getByText("Site navigation")).toBeInTheDocument()
     expect(screen.getByText("Site footer")).toBeInTheDocument()
     expect(getBlogPosts).toHaveBeenCalledWith(true)

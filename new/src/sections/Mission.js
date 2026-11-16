@@ -11,13 +11,13 @@ const strengths = [
 
 const Mission = () => (
   <section className="relative overflow-hidden bg-[#151240] px-5 pt-16 pb-24 text-[#FDF9D2] md:px-[4vw] md:pt-[73px] md:pb-[75px]" id="mission">
-    <img src={nut} alt="" aria-hidden="true" className="pointer-events-none absolute bottom-0 left-0 w-[70vw] max-w-[447px] opacity-[0.64] lg:w-[447px]" />
+    <img src={nut} alt="" aria-hidden="true" className="pointer-events-none absolute bottom-0 left-0 w-[70vw] max-w-[600px] opacity-[0.64] lg:w-[600px]" />
     <div className="relative z-10 grid gap-12 lg:grid-cols-[52.4%_47.6%] lg:gap-0">
       <div className="lg:pt-[30px]">
         <h2 className="text-[44px] leading-[0.9] tracking-[0.01em] text-[#FDF9D2] sm:text-[50px] lg:text-[56px]">
           <span className="font-['Barlow_Condensed'] font-bold uppercase text-xl md:text-4xl xl:text-7xl">WHY TEAMS KEEP US</span>
         </h2>
-        <p className="mt-4 max-w-[600px] text-lg leading-[24px] text-[#BCB8A9]">
+        <p className="mt-4 max-w-[400px] text-lg leading-[24px] text-[#BCB8A9]">
           <span className="font-['DM_Sans']">{intro}</span>
         </p>
       </div>

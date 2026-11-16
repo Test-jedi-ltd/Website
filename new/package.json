@@ -18,7 +18,6 @@
     "ajv-keywords": "5.1.0",
     "antd": "^5.27.4",
     "aos": "^2.3.4",
-    "browser-image-compression": "^2.0.2",
     "dompurify": "^3.4.17",
     "firebase": "^11.10.0",
     "firebase-admin": "^14.5.1",

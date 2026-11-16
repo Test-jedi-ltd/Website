@@ -20,7 +20,7 @@ const RelatedCard = ({ post, fallbackImage }) => (
       src={post.featuredImage || fallbackImage}
       alt={post.featuredImage ? post.featuredImageAlt || post.title : ""}
       loading="lazy"
-      className="h-[190px] w-full rounded-[8px] object-cover sm:h-[220px]"
+      className="aspect-[1.47/1] w-full rounded-[8px] bg-white object-cover"
     />
     <span className="mt-[9px] flex min-h-[18px] w-fit items-center rounded-full border border-[#C4D5FF] bg-white px-[6px]">
       <span className="font-['DM_Sans'] text-[9px] leading-none text-[#1A2D5B]">
@@ -115,14 +115,18 @@ export default function BlogPostDetail() {
             <img
               src={post.featuredImage || heroImage}
               alt={post.featuredImage ? post.featuredImageAlt || post.title : ""}
-              className="absolute inset-0 h-full w-full object-cover mix-blend-multiply"
+              fetchpriority="high"
+              className="absolute inset-0 h-full w-full object-cover object-center"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#03102E]/90 via-[#1A2D5B]/35 to-transparent" />
-            <div className="relative z-10 flex h-full items-end px-5 pb-[70px] sm:px-[5vw] lg:pb-[140px]">
-              <h1 className="m-0 max-w-[980px] text-[26px] leading-[32px] text-white sm:text-[29px] sm:leading-[36px] lg:text-[31px] lg:leading-[38px]">
+            <div
+              className="absolute inset-0 bg-gradient-to-t from-[#03102E]/80 via-[#1A2D5B]/30 to-[#1A2D5B]/10"
+              aria-hidden="true"
+            />
+            <header className="relative z-10 flex h-full items-end px-5 pb-[70px] text-white sm:px-[5vw] lg:pb-[140px]">
+              <h1 className="m-0 w-full max-w-[980px] text-[26px] leading-[32px] sm:text-[29px] sm:leading-[36px] lg:text-[31px] lg:leading-[38px]">
                 <span className="font-['DM_Sans'] font-bold">{post.title}</span>
               </h1>
-            </div>
+            </header>
           </section>
 
           <section className="px-5 pb-[64px] pt-[56px] sm:px-8 lg:px-0 lg:pt-[96px]">

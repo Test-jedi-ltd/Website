@@ -26,6 +26,7 @@ export default function Login() {
 
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState(null)
   const [submitting, setSubmitting] = useState(false)
 
@@ -111,16 +112,29 @@ export default function Login() {
             <label className="block text-sm font-medium mb-2" htmlFor="admin-password">
               Password
             </label>
-            <input
-              id="admin-password"
-              type="password"
-              autoComplete="current-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className={inputClass}
-              placeholder="Your password"
-              disabled={submitting}
-            />
+            <div className="relative">
+              <input
+                id="admin-password"
+                type={showPassword ? "text" : "password"}
+                autoComplete="current-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className={`${inputClass} pr-16`}
+                placeholder="Your password"
+                disabled={submitting}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((visible) => !visible)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+                aria-controls="admin-password"
+                aria-pressed={showPassword}
+                disabled={submitting}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-[#964A21] hover:text-[#7D3D1B] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#964A21] disabled:opacity-60"
+              >
+                {showPassword ? "Hide" : "Show"}
+              </button>
+            </div>
           </div>
 
           {error && <p className="text-[#c0392b] text-sm">{error}</p>}

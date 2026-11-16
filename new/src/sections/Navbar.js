@@ -60,7 +60,7 @@ const Navbar = () => {
 
   return (
     <>
-      <header className="fixed inset-x-0 top-0 z-50 h-[64px] sm:h-[74px] lg:h-[86px] px-4 sm:px-5 lg:pl-[4vw] lg:pr-[14.9vw] bg-light-brown/90 backdrop-blur-md border-b grid grid-cols-[auto_1fr_auto] items-center">
+      <header className="fixed inset-x-0 top-0 z-50 h-[64px] sm:h-[74px] lg:h-[86px] px-4 sm:px-5 lg:pl-[4vw] lg:pr-[14.9vw] bg-light-brown/90 backdrop-blur-md border-b border-[rgba(21,18,64,0.14)] grid grid-cols-[auto_1fr_auto] items-center">
         <button className="brand flex items-center justify-self-start" onClick={goHome} aria-label="Test-Jedi home">
           <img src={logo} alt="Test-Jedi" className="h-auto w-[92px] sm:w-[110px] lg:w-[129px]" />
         </button>
