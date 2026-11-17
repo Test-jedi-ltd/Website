@@ -86,7 +86,7 @@ const ServicesPage = () => (
               <span className="block">get back</span>
             </span>
           </h1>
-          <p className="mx-auto max-w-[650px] text-center text-[16px] leading-[25px] lg:text-[22px]">
+          <p className=" max-w-[650px]  text-[16px] leading-[25px] lg:text-[22px]">
             <span className="font-['DM_Sans']">
               Each engagement ships the same three artefacts: a test plan you approve up front, a run
               report you can audit, and defect tickets your engineers can act on without asking us a question.

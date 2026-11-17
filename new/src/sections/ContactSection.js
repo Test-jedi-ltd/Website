@@ -94,14 +94,14 @@ const ContactForm = () => {
     >
       <span className="font-['DM_Sans'] font-semibold">Target date</span>
     </label>
-    <div className="mt-[5px] flex flex-col gap-[6px]">
+    <div className="mt-[5px] flex flex-col gap-[6px] lg:w-1/2">
       <input
         type="date"
         id="target-date"
         name="target-date"
         aria-describedby="target-date-hint"
         title="When do you need our services"
-        className="h-[38px] w-full xl:w-[382px] border border-dark-brown bg-white px-4 text-[15px] text-dark-brown outline-none"
+        className="h-[38px] border border-dark-brown bg-white px-4 text-[15px] text-dark-brown outline-none"
       />
       <div id="target-date-hint" className="text-[11px] text-[#6B6B6C] mt-1">
         <span className="font-['DM_Sans']">When do you need our services</span>
