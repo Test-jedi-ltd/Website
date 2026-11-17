@@ -9,6 +9,7 @@ import BlogPage from "./pages/Blog";
 import BlogPostDetail from "./components/BlogPostDetail";
 import ContactPage from "./pages/Contact";
 import CareersPage from "./pages/Careers";
+import { PrivacyPage, TermsPage } from "./pages/LegalPages";
 
 const AdminShell = lazy(() => import("./admin/AdminShell"));
 const Login = lazy(() => import("./admin/pages/Login"));
@@ -53,6 +54,8 @@ function App() {
             />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/careers" element={<CareersPage />} />
+            <Route path="/terms" element={<TermsPage />} />
+            <Route path="/privacy" element={<PrivacyPage />} />
 
             <Route path="/admin/login" element={<Login />} />
             <Route path="/admin" element={<AdminShell />}>

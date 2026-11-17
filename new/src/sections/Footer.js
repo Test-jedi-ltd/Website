@@ -134,12 +134,12 @@ const Footer = ({ hideCta = false }) => (
           <span className="font-['DM_Sans']">© 2026 Test-Jedi</span>
         </span>
         <div className="flex gap-3">
-          <a className="transition-colors hover:text-[#D9C5B2]" href="#privacy">
+          <Link className="transition-colors hover:text-[#D9C5B2]" to="/privacy">
             <span className="font-['DM_Sans']">Privacy</span>
-          </a>
-          <a className="transition-colors hover:text-[#D9C5B2]" href="#terms">
+          </Link>
+          <Link className="transition-colors hover:text-[#D9C5B2]" to="/terms">
             <span className="font-['DM_Sans']">Terms</span>
-          </a>
+          </Link>
         </div>
       </div>
     </section>
