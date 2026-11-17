@@ -48,7 +48,7 @@ describe("BlogPostDetail", () => {
   })
 
   it("renders dynamic article content in the original hero and related-story layout", async () => {
-    render(<BlogPostDetail />)
+    const { container } = render(<BlogPostDetail />)
 
     expect(
       await screen.findByRole("heading", {
@@ -61,7 +61,16 @@ describe("BlogPostDetail", () => {
     expect(screen.getByText("Related dynamic article")).toBeInTheDocument()
     const featuredImage = screen.getByRole("img", { name: "Dynamic article title" })
     expect(featuredImage).toHaveAttribute("src", "https://images.example/article.jpg")
-    expect(featuredImage).toHaveClass("h-full", "w-full", "object-cover", "object-center")
+    expect(featuredImage).toHaveClass("h-full", "w-full", "object-center")
+    expect(featuredImage.parentElement.parentElement).toHaveClass("mx-auto", "w-2/3")
+    expect(featuredImage.parentElement).toHaveStyle({
+      maskImage: "linear-gradient(90deg, transparent 0%, black 22%, black 78%, transparent 100%)",
+      WebkitMaskImage: "linear-gradient(90deg, transparent 0%, black 22%, black 78%, transparent 100%)",
+    })
+    const blurredCover = Array.from(container.querySelectorAll("img")).find((image) =>
+      image.classList.contains("blur-[24px]")
+    )
+    expect(blurredCover).toBeInTheDocument()
     expect(featuredImage).not.toHaveClass("mix-blend-multiply")
     expect(screen.getByText("Site navigation")).toBeInTheDocument()
     expect(screen.getByText("Site footer")).toBeInTheDocument()

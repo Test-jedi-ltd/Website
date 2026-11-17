@@ -78,7 +78,7 @@ const ServicesPage = () => (
     <Navbar />
     <main className="overflow-hidden bg-light-brown text-dark-brown">
       <section className="px-5 pb-[72px] pt-16 md:px-[4vw] md:pb-[100px] md:pt-[95px]">
-        <div className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_minmax(0,0.8fr)] xl:items-end xl:gap-[clamp(2rem,5vw,5rem)] xl:py-10">
+        <div className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_minmax(0,0.8fr)] xl:items-center xl:gap-[clamp(2rem,5vw,5rem)] xl:py-10">
           <h1 className="text-[clamp(2.5rem,7vw,6.25rem)] leading-[0.88]">
             <span className="font-['Barlow_Condensed'] font-bold uppercase flex flex-col gap-5">
               <span className="block">What we run,</span>
@@ -86,8 +86,8 @@ const ServicesPage = () => (
               <span className="block">get back</span>
             </span>
           </h1>
-          <p className="text-[16px] leading-[25px] lg:text-[22px]">
-            <span className="font-['DM_Sans'] text-center">
+          <p className="mx-auto max-w-[650px] text-center text-[16px] leading-[25px] lg:text-[22px]">
+            <span className="font-['DM_Sans']">
               Each engagement ships the same three artefacts: a test plan you approve up front, a run
               report you can audit, and defect tickets your engineers can act on without asking us a question.
             </span>

@@ -66,6 +66,40 @@
   outline: none;
 }
 
+.admin-shell .ProseMirror ul,
+.admin-shell .ProseMirror ol {
+  margin: 0.75rem 0;
+  padding-left: 1.75rem;
+}
+
+.admin-shell .ProseMirror ul {
+  list-style: disc;
+}
+
+.admin-shell .ProseMirror ul ul {
+  list-style: circle;
+}
+
+.admin-shell .ProseMirror ol {
+  list-style: decimal;
+}
+
+.admin-shell .ProseMirror li {
+  padding-left: 0.25rem;
+}
+
+.admin-shell .ProseMirror li p {
+  margin: 0.25rem 0;
+}
+
+.admin-shell .ProseMirror blockquote {
+  margin: 1rem 0;
+  padding-left: 1rem;
+  border-left: 3px solid #964a21;
+  color: #645f70;
+  font-style: italic;
+}
+
 .admin-shell .admin-surface {
   color: #151240;
   background: #fffdf6;

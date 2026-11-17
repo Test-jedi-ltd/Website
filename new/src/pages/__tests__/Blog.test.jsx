@@ -41,7 +41,7 @@ describe("BlogPage", () => {
       },
     ])
 
-    render(<BlogPage />)
+    const { container } = render(<BlogPage />)
 
     await waitFor(() => {
       expect(screen.getByRole("link", { name: /Featured article/ })).toHaveAttribute(
@@ -61,6 +61,12 @@ describe("BlogPage", () => {
     const featuredImage = screen.getByRole("img", { name: "Featured article" })
     expect(featuredImage).toHaveAttribute("src", "https://images.example/featured.jpg")
     expect(featuredImage).toHaveClass("h-full", "w-full", "object-cover", "object-center")
+    expect(featuredImage.parentElement).toHaveClass("inset-y-0", "w-2/3")
+    expect(featuredImage.closest("a")).toHaveClass("w-full")
+    const blurredCover = Array.from(container.querySelectorAll("img")).find((image) =>
+      image.classList.contains("blur-[24px]")
+    )
+    expect(blurredCover).toBeInTheDocument()
     expect(screen.getByText("Site navigation")).toBeInTheDocument()
     expect(screen.getByText("Site footer")).toBeInTheDocument()
     expect(getBlogPosts).toHaveBeenCalledWith(true)

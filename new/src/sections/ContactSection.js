@@ -1,10 +1,12 @@
+import { useState } from "react";
+
 const steps = [
   "We read the scope and come back with questions, in writing.",
   "You get a test plan, a team shape and a price within two days.",
   "Approve it and testing starts - 48 hours for a burst, two weeks for a dedicated team",
 ];
 
-const Field = ({ label, id, type = "text", placeholder, select = false }) => (
+const Field = ({ label, id, type = "text", placeholder, select = false, required = false }) => (
   <label className="block leading-none text-dark-brown" htmlFor={id}>
     <span className="block text-[12px] font-semibold uppercase leading-none tracking-[0.12em]">
       <span className="font-['DM_Sans'] font-semibold">{label}</span>
@@ -12,7 +14,9 @@ const Field = ({ label, id, type = "text", placeholder, select = false }) => (
     {select ? (
       <select
         id={id}
+        name={id}
         defaultValue=""
+        required={required}
         className="mt-[6px] h-[52px] w-full appearance-none border border-dark-brown bg-white px-4 text-[15px] text-dark-brown outline-none"
       >
         <option value="" disabled>
@@ -27,36 +31,81 @@ const Field = ({ label, id, type = "text", placeholder, select = false }) => (
     ) : (
       <input
         id={id}
+        name={id}
         type={type}
         placeholder={placeholder}
+        required={required}
         className="mt-[6px] h-[52px] w-full border border-dark-brown bg-white px-4 text-[15px] text-dark-brown outline-none placeholder:text-[#757575]"
       />
     )}
   </label>
 );
 
-const ContactForm = () => (
-  <form onSubmit={(event) => event.preventDefault()} className="mt-[15px] w-full max-w-[844px] bg-medium-brown p-5 sm:px-[31px] sm:pb-[32px] sm:pt-[50px]">
+const ContactForm = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [status, setStatus] = useState(null);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    const payload = Object.fromEntries(formData.entries());
+
+    setIsSubmitting(true);
+    setStatus(null);
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "We couldn't send your message. Please try again.");
+      }
+
+      form.reset();
+      setStatus({ type: "success", message: "Thanks for your message. We'll be in touch soon." });
+    } catch (error) {
+      setStatus({
+        type: "error",
+        message: error.message || "We couldn't send your message. Please try again.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+  <form onSubmit={handleSubmit} className="mt-[15px] w-full max-w-[844px] bg-medium-brown p-5 sm:px-[31px] sm:pb-[32px] sm:pt-[50px]">
     <div className="grid gap-x-4 gap-y-4 sm:grid-cols-2">
-      <Field id="full-name" label="Full name" placeholder="Your name" />
-      <Field id="work-email" label="Work email" type="email" placeholder="name@company.com" />
-      <Field id="company" label="Company" placeholder="Company name" />
+      <Field id="full-name" label="Full name" placeholder="Your name" required />
+      <Field id="work-email" label="Work email" type="email" placeholder="name@company.com" required />
+      <Field id="company" label="Company" placeholder="Company name" required />
       <Field id="service" label="Service needed" placeholder="Select a service" select />
     </div>
 
-    <p className="mt-[18px] text-[12px] font-semibold uppercase leading-none tracking-[0.12em] text-dark-brown">
+    <label
+      className="mt-[18px] block text-[12px] font-semibold uppercase leading-none tracking-[0.12em] text-dark-brown"
+      htmlFor="target-date"
+      title="When do you need our services"
+    >
       <span className="font-['DM_Sans'] font-semibold">Target date</span>
-    </p>
-    <div className="mt-[5px] flex flex-wrap gap-[6px]">
-      {["This month", "Next quarter", "Ongoing"].map((option) => (
-        <button
-          key={option}
-          type="button"
-          className="h-[38px] border border-dark-brown bg-white px-[18px] text-[13px] leading-none text-dark-brown"
-        >
-          <span className="font-['DM_Sans']">{option}</span>
-        </button>
-      ))}
+    </label>
+    <div className="mt-[5px] flex flex-col gap-[6px]">
+      <input
+        type="date"
+        id="target-date"
+        name="target-date"
+        aria-describedby="target-date-hint"
+        title="When do you need our services"
+        className="h-[38px] w-full xl:w-[382px] border border-dark-brown bg-white px-4 text-[15px] text-dark-brown outline-none"
+      />
+      <div id="target-date-hint" className="text-[11px] text-[#6B6B6C] mt-1">
+        <span className="font-['DM_Sans']">When do you need our services</span>
+      </div>
     </div>
 
     <label className="mt-[17px] block leading-none text-dark-brown" htmlFor="testing-scope">
@@ -65,7 +114,9 @@ const ContactForm = () => (
       </span>
       <textarea
         id="testing-scope"
+        name="testing-scope"
         placeholder="Product, platforms, what's already covered"
+        required
         className="mt-[6px] h-[114px] w-full resize-none border border-dark-brown bg-white px-4 pb-4 pt-[14px] text-[15px] leading-[22px] text-dark-brown outline-none placeholder:text-[#757575]"
       />
     </label>
@@ -73,9 +124,10 @@ const ContactForm = () => (
     <div className="mt-[23px] flex flex-wrap items-center gap-[18px]">
       <button
         type="submit"
+        disabled={isSubmitting}
         className="h-[45px] bg-accent-brown px-[31px] text-[15px] leading-none text-light-brown"
       >
-        <span className="font-['DM_Sans']">Send us a message</span>
+        <span className="font-['DM_Sans']">{isSubmitting ? "Sending..." : "Send us a message"}</span>
       </button>
       <a
         href="mailto:operations@test-jedi.com"
@@ -84,8 +136,17 @@ const ContactForm = () => (
         <span className="font-['DM_Sans']">Or email operations@test-jedi.com</span>
       </a>
     </div>
+    {status && (
+      <p
+        className={`mt-4 text-[14px] ${status.type === "success" ? "text-dark-brown" : "text-red-800"}`}
+        role={status.type === "success" ? "status" : "alert"}
+      >
+        {status.message}
+      </p>
+    )}
   </form>
-);
+  );
+};
 
 const NextSteps = () => (
   <div className="min-h-[241px] bg-dark-brown px-[28px] pb-[26px] pt-[29px]">

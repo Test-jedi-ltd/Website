@@ -21,11 +21,13 @@ Website/
 │  │  └─ index.css
 │  ├─ package.json
 │  └─ tailwind.config.js
+├─ api/                  # Vercel serverless API functions
 ├─ vercel.json           # Deploys the `new/` app
 └─ README.md
 ```
 
-All application code and dependencies live inside `new/`.
+The React application and dependencies live inside `new/`; Vercel serverless
+functions live in the root `api/` directory.
 
 ## Development
 
@@ -55,6 +57,21 @@ Firebase config is read from `REACT_APP_FIREBASE_*` environment variables (see
 cd new
 cp .env.example .env
 ```
+
+## Contact form email
+
+The shared contact form on `/contact` and `/services` sends submissions through
+the Vercel function at `/api/contact`, using the Resend email API. Set these
+server-side environment variables in Vercel. For local API testing, use the
+root `.env.example` as a template for `.env`, then run `vercel dev`:
+
+- `RESEND_API_KEY`: a Resend API key.
+- `CONTACT_FROM_EMAIL`: a sender address on a domain verified with Resend.
+- `CONTACT_EMAIL`: destination address (defaults to `operations@test-jedi.com`).
+
+Do not prefix these values with `REACT_APP_`; the API key must remain server
+side. The form reports an error instead of claiming success if email delivery
+is unavailable.
 
 ## Firebase setup
 

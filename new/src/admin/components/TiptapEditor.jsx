@@ -162,6 +162,7 @@ const TiptapEditor = ({ value, onChange, initialContent }) => {
         </button>
         <button
           type="button"
+          aria-pressed={editor.isActive("bulletList")}
           style={toolbarButtonStyle(editor.isActive("bulletList"))}
           onClick={() => editor.chain().focus().toggleBulletList().run()}
         >
@@ -169,6 +170,7 @@ const TiptapEditor = ({ value, onChange, initialContent }) => {
         </button>
         <button
           type="button"
+          aria-pressed={editor.isActive("orderedList")}
           style={toolbarButtonStyle(editor.isActive("orderedList"))}
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
         >
@@ -176,6 +178,7 @@ const TiptapEditor = ({ value, onChange, initialContent }) => {
         </button>
         <button
           type="button"
+          aria-pressed={editor.isActive("blockquote")}
           style={toolbarButtonStyle(editor.isActive("blockquote"))}
           onClick={() => editor.chain().focus().toggleBlockquote().run()}
         >
