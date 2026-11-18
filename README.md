@@ -58,14 +58,16 @@ cd new
 cp .env.example .env
 ```
 
-## Contact form email
+## Contact and cohort form email
 
-The shared contact form on `/contact` and `/services` sends submissions through
-the Vercel function at `/api/contact`, using the Resend email API. Set these
-server-side environment variables in Vercel. For local development, copy
+The contact form on `/contact` and `/services` sends submissions through
+`/api/contact`; cohort applications on `/careers` are sent through
+`/api/cohort-application`. Both use the Resend email API and deliver to
+`CONTACT_EMAIL` (default: `operations@test-jedi.com`). Set these server-side
+environment variables in Vercel. For local development, copy
 `new/.env.example` to `new/.env`, fill in the mail settings below, and run
-`npm run dev` from `new`; the development server routes `/api/contact` to the
-same mail handler. To test the Vercel function runtime locally, use the root
+`npm run dev` from `new`; the development server routes both endpoints to the
+same mail handlers. To test the Vercel function runtime locally, use the root
 `.env.example` as a template for `.env` and run `vercel dev`:
 
 - `RESEND_API_KEY`: a Resend API key.

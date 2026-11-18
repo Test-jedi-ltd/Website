@@ -84,7 +84,6 @@ export const labelConfig = {
   navbarCaseStudies: "Case Studies",
   navbarCohorts: "Cohorts",
   navbarBlog: "Blog",
-  proposeProject: "Propose a Project",
   heroHeadlineLead: "WE TEST SOFTWARE",
   heroHeadlineAccent: "BEFORE YOUR USERS DO.",
   // heroHeadlineEnd: "DO.",

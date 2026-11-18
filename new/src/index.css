@@ -177,7 +177,6 @@ main {
 }
 nav {
   display: flex;
-  gap: 38px;
 }
 nav button,
 .footer-bottom button {
@@ -325,6 +324,17 @@ nav button,
 .mobile-drawer-close-icon {
   position: absolute;
   right: 20px;
+}
+.ant-drawer-body .mobile-drawer-nav-option {
+  display: block;
+  width: 100%;
+  padding: 16px 0;
+  border: 0;
+  background: transparent;
+  text-align: right;
+}
+.ant-drawer-body .mobile-drawer-nav-divider {
+  border-bottom: 1px solid #dbd8bd;
 }
 .route-transition {
   animation: route-enter 420ms cubic-bezier(0.2, 0.7, 0.2, 1) both;

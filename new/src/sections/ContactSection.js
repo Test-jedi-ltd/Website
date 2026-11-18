@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react";
 import ToastNotification from "../components/ToastNotification";
+import getApiEndpoint from "../lib/getApiEndpoint";
 
 const steps = [
   "We read the scope and come back with questions, in writing.",
@@ -47,14 +48,6 @@ const ContactForm = () => {
   const [status, setStatus] = useState(null);
   const dismissStatus = useCallback(() => setStatus(null), []);
 
-  const getContactEndpoint = () => {
-    const hostname = window.location.hostname;
-    if (hostname === "test-jedi.com" || hostname === "www.test-jedi.com") {
-      return "https://test-jedi-nine.vercel.app/api/contact";
-    }
-    return "/api/contact";
-  };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     const form = event.currentTarget;
@@ -71,7 +64,7 @@ const ContactForm = () => {
     setStatus(null);
 
     try {
-      const response = await fetch(getContactEndpoint(), {
+      const response = await fetch(getApiEndpoint("contact"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

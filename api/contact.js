@@ -1,3 +1,5 @@
+const sendResendEmail = require("../lib/sendResendEmail");
+
 const allowedServices = new Set([
   "Full-cycle testing",
   "Test automation",
@@ -92,14 +94,7 @@ module.exports = async function contact(req, res) {
     return res.status(400).json({ error: "Please select a valid target date." });
   }
 
-  const apiKey = process.env.RESEND_API_KEY;
-  const from = process.env.CONTACT_FROM_EMAIL;
   const to = process.env.CONTACT_EMAIL || "operations@test-jedi.com";
-  if (!apiKey || !from) {
-    console.error("Contact email is not configured. Set RESEND_API_KEY and CONTACT_FROM_EMAIL.");
-    return res.status(503).json({ error: "The contact form is temporarily unavailable. Please try again later." });
-  }
-
   const subject = `New inquiry from ${name} (${company})`.replace(/[\r\n]/g, " ");
   const text = [
     `Name: ${name}`,
@@ -112,51 +107,26 @@ module.exports = async function contact(req, res) {
     testingScope,
   ].join("\n");
 
-  let emailResponse;
-  try {
-    emailResponse = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        from,
-        to: [to],
-        reply_to: email,
-        subject,
-        text,
-      }),
-    });
-  } catch (error) {
-    console.error("Contact email provider request failed.", error);
-    return res.status(502).json({ error: "We couldn't send your message right now. Please try again." });
-  }
-
-  if (!emailResponse.ok) {
-    let providerMessage = "";
-    try {
-      const providerError = await emailResponse.json();
-      if (typeof providerError?.message === "string") {
-        providerMessage = providerError.message.trim().slice(0, 300);
-      }
-    } catch (error) {
-      console.error("Could not read contact email provider error response.", error);
+  const delivery = await sendResendEmail({
+    to,
+    replyTo: email,
+    subject,
+    text,
+    formLabel: "Contact",
+  });
+  if (!delivery.ok) {
+    if (delivery.reason === "not-configured") {
+      return res.status(503).json({ error: "The contact form is temporarily unavailable. Please try again later." });
     }
-
-    console.error(
-      `Contact email provider returned HTTP ${emailResponse.status}.`,
-      providerMessage || "No provider error message was returned."
-    );
-    if (emailResponse.status === 401) {
+    if (delivery.reason === "api-key-rejected") {
       return res.status(503).json({
         error: "Resend rejected the API key. Check RESEND_API_KEY in new/.env, then restart the development server.",
       });
     }
-    if (emailResponse.status === 403) {
+    if (delivery.reason === "sender-rejected") {
       return res.status(502).json({
-        error: providerMessage
-          ? `Resend rejected the sender or recipient: ${providerMessage}`
+        error: delivery.providerMessage
+          ? `Resend rejected the sender or recipient: ${delivery.providerMessage}`
           : "Resend rejected the sender or recipient. Verify the sender domain and recipient settings in Resend.",
       });
     }

@@ -3,6 +3,7 @@ import Footer from "../sections/Footer";
 import cohortRings from "../assets/cohort-rings.svg";
 import { useState } from "react";
 import { Modal } from "antd";
+import getApiEndpoint from "../lib/getApiEndpoint";
 
 const benefits = [
   [
@@ -48,6 +49,8 @@ const CareersPage = () => {
   const [hasLaptop, setHasLaptop] = useState("");
   const [tracks, setTracks] = useState([]);
   const [validationErrors, setValidationErrors] = useState({});
+  const [submissionError, setSubmissionError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const clearValidationError = (field) => {
     setValidationErrors((current) => {
@@ -67,8 +70,9 @@ const CareersPage = () => {
     );
   };
 
-  const submitApplication = (event) => {
+  const submitApplication = async (event) => {
     event.preventDefault();
+    setSubmissionError("");
 
     const form = event.currentTarget;
     const email = form.elements.email;
@@ -123,7 +127,46 @@ const CareersPage = () => {
       return;
     }
 
-    setSubmitted(true);
+    setIsSubmitting(true);
+    setSubmissionError("");
+    try {
+      const payload = {
+        fullName: form.elements.fullName.value.trim(),
+        email: form.elements.email.value.trim(),
+        phone: form.elements.phone.value.trim(),
+        tracks,
+        experience: form.elements.experience.value,
+        hasLaptop,
+      };
+      const response = await fetch(getApiEndpoint("cohort-application"), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const result = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(
+          typeof result?.error === "string"
+            ? result.error
+            : "We couldn't send your application. Please try again."
+        );
+      }
+
+      form.reset();
+      setTracks([]);
+      setHasLaptop("");
+      setValidationErrors({});
+      setSubmitted(true);
+    } catch (error) {
+      setSubmissionError(
+        error instanceof Error && error.message
+          ? error.message
+          : "We couldn't send your application. Please try again."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -223,6 +266,7 @@ const CareersPage = () => {
             onClick={() => {
               setSubmitted(false);
               setValidationErrors({});
+              setSubmissionError("");
               setApplicationOpen(true);
             }}
             className="flex h-[46px] w-[178px] shrink-0 items-center justify-center bg-dark-brown text-[13px] font-semibold uppercase leading-none tracking-[0.08em] text-light-brown"
@@ -253,11 +297,22 @@ const CareersPage = () => {
           <button type="button" onClick={() => setApplicationOpen(false)}>Close</button>
         </div>
       ) : (
-        <form className="cohort-application-form" onSubmit={submitApplication} noValidate>
+        <form
+          className="cohort-application-form"
+          onSubmit={submitApplication}
+          noValidate
+          aria-busy={isSubmitting}
+        >
           <div className="cohort-modal-heading">
             <h2>Apply for cohort</h2>
             <p>Please fill out this quick form to register your interest.</p>
           </div>
+
+          {submissionError && (
+            <div className="cohort-validation-summary" role="alert">
+              <p>{submissionError}</p>
+            </div>
+          )}
 
           {Object.keys(validationErrors).length > 0 && (
             <div className="cohort-validation-summary" role="alert">
@@ -383,7 +438,9 @@ const CareersPage = () => {
             {validationErrors.hasLaptop && <p className="cohort-field-error" id="laptop-error">{validationErrors.hasLaptop}</p>}
           </fieldset>
 
-          <button className="cohort-submit" type="submit">Submit cohort application</button>
+          <button className="cohort-submit" type="submit" disabled={isSubmitting}>
+            {isSubmitting ? "Sending application..." : "Submit cohort application"}
+          </button>
         </form>
       )}
     </Modal>

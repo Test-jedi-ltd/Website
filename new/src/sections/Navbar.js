@@ -60,11 +60,14 @@ const Navbar = () => {
 
   return (
     <>
-      <header className={`fixed inset-x-0 top-0 z-50 grid h-[64px] grid-cols-[auto_1fr_auto] items-center px-4 transition-colors duration-300 ease-in-out sm:h-[74px] sm:px-5 lg:h-[86px] lg:pl-[4vw] lg:pr-[14.9vw] ${
+      <header
+        className={`fixed inset-x-0 top-0 z-50 grid h-[64px] grid-cols-[auto_1fr_auto] items-center px-4 sm:h-[74px] sm:px-5 lg:h-[86px] lg:pl-[4vw] lg:pr-[14.9vw] ${
         open
-          ? "border-b border-dark-brown/10 bg-light-brown/60 backdrop-blur-md"
+          ? "border-b border-dark-brown/10 bg-light-brown/85 backdrop-blur-md"
           : "border-b border-[rgba(21,18,64,0.14)] bg-light-brown/90 backdrop-blur-md"
-      }`}>
+        }`}
+        style={{ backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", willChange: "backdrop-filter" }}
+      >
         <button className={`${open ? "hidden" : "flex"} items-center justify-self-start border-0 bg-transparent text-dark-brown`} onClick={goHome} aria-label="Test-Jedi home">
           <img src={logo} alt="Test-Jedi" className="h-auto w-[92px] sm:w-[110px] lg:w-[129px]" />
         </button>
@@ -121,26 +124,32 @@ const Navbar = () => {
           height="auto"
           classNames={{ header: "mobile-drawer-header" }}
           styles={{
-            mask: { background: "rgba(21, 18, 64, 0.12)" },
+            mask: {
+              background: "rgba(21, 18, 64, 0.12)",
+              backdropFilter: "blur(4px)",
+              WebkitBackdropFilter: "blur(4px)",
+              willChange: "backdrop-filter",
+            },
             content: {
-              background: "rgba(253, 249, 210, 0.62)",
-              backdropFilter: "blur(14px)",
-              WebkitBackdropFilter: "blur(14px)",
+              background: "rgba(253, 249, 210, 0.84)",
+              backdropFilter: "blur(16px)",
+              WebkitBackdropFilter: "blur(16px)",
+              willChange: "backdrop-filter, transform",
               boxShadow: "none",
             },
             header: { background: "transparent", borderBottom: "none", padding: 0 },
             body: { paddingTop: 8, paddingBottom: 18 },
           }}
         >
-          <nav className="flex flex-col items-end gap-4 text-right">
-            <button className={`text-right text-[15px] ${pathname === "/services" ? "text-accent-brown" : "text-dark-brown"}`} onClick={goToServices}>{labelConfig.navbarServices}</button>
-            <button className={`text-right text-[15px] ${pathname === "/careers" ? "text-accent-brown" : "text-dark-brown"}`} onClick={goToCareers}>{labelConfig.navbarCohorts}</button>
-            <button className={`text-right text-[15px] ${pathname.startsWith("/blog") ? "text-accent-brown" : "text-dark-brown"}`} onClick={goToBlog}>{labelConfig.navbarBlog}</button>
+          <nav className="flex flex-col items-end text-right">
+            <button className={`mobile-drawer-nav-option mobile-drawer-nav-divider ${pathname === "/services" ? "text-accent-brown" : "text-dark-brown"}`} onClick={goToServices}>{labelConfig.navbarServices}</button>
+            <button className={`mobile-drawer-nav-option mobile-drawer-nav-divider ${pathname === "/careers" ? "text-accent-brown" : "text-dark-brown"}`} onClick={goToCareers}>{labelConfig.navbarCohorts}</button>
+            <button className={`mobile-drawer-nav-option ${pathname.startsWith("/blog") ? "text-accent-brown" : "text-dark-brown"}`} onClick={goToBlog}>{labelConfig.navbarBlog}</button>
             <button
-              className={`mt-2 inline-flex h-[38px] items-center justify-center self-end px-5 text-[12px] font-semibold uppercase tracking-[0.08em] text-white ${pathname === "/contact" ? "bg-dark-brown" : "bg-accent-brown"}`}
+              className={`mt-2 inline-flex h-[38px] items-center justify-center self-end px-5 text-[12px] text-light-brown font-semibold tracking-[0.08em] ${pathname === "/contact" ? "bg-dark-brown" : "bg-accent-brown"}`}
               onClick={goToContact}
             >
-              {pathname === "/contact" ? "You're here" : labelConfig.proposeProject}
+              {pathname === "/contact" ? "You're here" : labelConfig.proposeProjectLower}
             </button>
           </nav>
         </Drawer>
