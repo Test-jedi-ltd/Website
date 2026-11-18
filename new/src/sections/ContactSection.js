@@ -58,6 +58,12 @@ const ContactForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const form = event.currentTarget;
+    const emailInput = form.elements.namedItem("work-email");
+    if (!emailInput.checkValidity()) {
+      emailInput.reportValidity();
+      return;
+    }
+
     const formData = new FormData(form);
     const payload = Object.fromEntries(formData.entries());
 

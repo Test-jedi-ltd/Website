@@ -47,7 +47,7 @@ const Navbar = () => {
   };
 
   const navLinkClass = (active) =>
-    `text-[13px] lg:text-[16px] font-normal leading-none ${active ? "text-accent-brown" : "text-dark-brown"}`;
+    `text-[13px] lg:text-[16px] font-normal leading-none transition-colors duration-200 ${active ? "text-accent-brown" : "text-dark-brown"}`;
 
   const goToContact = () => {
     setOpen(false);
@@ -60,7 +60,7 @@ const Navbar = () => {
 
   return (
     <>
-      <header className={`fixed inset-x-0 top-0 z-50 grid h-[64px] grid-cols-[auto_1fr_auto] items-center px-4 sm:h-[74px] sm:px-5 lg:h-[86px] lg:pl-[4vw] lg:pr-[14.9vw] ${
+      <header className={`fixed inset-x-0 top-0 z-50 grid h-[64px] grid-cols-[auto_1fr_auto] items-center px-4 transition-colors duration-300 ease-in-out sm:h-[74px] sm:px-5 lg:h-[86px] lg:pl-[4vw] lg:pr-[14.9vw] ${
         open
           ? "border-b border-dark-brown/10 bg-light-brown/60 backdrop-blur-md"
           : "border-b border-[rgba(21,18,64,0.14)] bg-light-brown/90 backdrop-blur-md"

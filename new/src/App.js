@@ -1,8 +1,9 @@
 import { lazy, Suspense } from "react";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { AuthProvider } from "./admin/AuthContext";
 import "./admin/admin.css";
 import ScrollToTop from "./components/ScrollToTop";
+import ScrollReveal from "./components/ScrollReveal";
 import Home from "./pages/Home";
 import ServicesPage from "./pages/Services";
 import BlogPage from "./pages/Blog";
@@ -32,11 +33,18 @@ function RouteFallback() {
   );
 }
 
-function App() {
+function AppRoutes() {
+  const { pathname } = useLocation();
+  const isAdminRoute = pathname.startsWith("/admin");
+
   return (
-    <BrowserRouter>
-      <AuthProvider>
-        <ScrollToTop />
+    <>
+      <ScrollToTop />
+      <ScrollReveal />
+      <div
+        key={isAdminRoute ? "admin" : pathname}
+        className={isAdminRoute ? undefined : "route-transition"}
+      >
         <Suspense fallback={<RouteFallback />}>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -74,6 +82,16 @@ function App() {
             <Route path="*" element={<Home />} />
           </Routes>
         </Suspense>
+      </div>
+    </>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AuthProvider>
+        <AppRoutes />
       </AuthProvider>
     </BrowserRouter>
   );

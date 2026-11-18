@@ -47,8 +47,19 @@ const CareersPage = () => {
   const [submitted, setSubmitted] = useState(false);
   const [hasLaptop, setHasLaptop] = useState("");
   const [tracks, setTracks] = useState([]);
+  const [validationErrors, setValidationErrors] = useState({});
+
+  const clearValidationError = (field) => {
+    setValidationErrors((current) => {
+      if (!current[field]) return current;
+      const next = { ...current };
+      delete next[field];
+      return next;
+    });
+  };
 
   const toggleTrack = (track) => {
+    clearValidationError("tracks");
     setTracks((current) =>
       current.includes(track)
         ? current.filter((item) => item !== track)
@@ -58,6 +69,60 @@ const CareersPage = () => {
 
   const submitApplication = (event) => {
     event.preventDefault();
+
+    const form = event.currentTarget;
+    const email = form.elements.email;
+    const phone = form.elements.phone.value.trim();
+    const phoneDigits = phone.replace(/\D/g, "").length;
+    const errors = {};
+
+    if (!form.elements.fullName.value.trim()) {
+      errors.fullName = "Enter your full name.";
+    }
+    if (!email.value.trim() || !email.checkValidity()) {
+      errors.email = "Enter a valid email address.";
+    }
+    if (
+      !/^\+?[0-9\s().-]+$/.test(phone) ||
+      phoneDigits < 7 ||
+      phoneDigits > 15
+    ) {
+      errors.phone = "Enter a valid phone number with 7–15 digits.";
+    }
+    if (tracks.length === 0) {
+      errors.tracks = "Select at least one track of interest.";
+    }
+    if (!form.elements.experience.value) {
+      errors.experience = "Select your current experience level.";
+    }
+    if (!hasLaptop) {
+      errors.hasLaptop = "Choose Yes or No for laptop and internet access.";
+    }
+
+    setValidationErrors(errors);
+    const firstInvalidField = [
+      "fullName",
+      "email",
+      "phone",
+      "tracks",
+      "experience",
+      "hasLaptop",
+    ].find((field) => errors[field]);
+
+    if (firstInvalidField) {
+      const invalidElement =
+        firstInvalidField === "hasLaptop"
+          ? form.querySelector('[data-validation-field="hasLaptop"]')
+          : form.querySelector(`[name="${firstInvalidField}"]`);
+      if (invalidElement) {
+        invalidElement.focus();
+        if (typeof invalidElement.scrollIntoView === "function") {
+          invalidElement.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      }
+      return;
+    }
+
     setSubmitted(true);
   };
 
@@ -157,6 +222,7 @@ const CareersPage = () => {
             type="button"
             onClick={() => {
               setSubmitted(false);
+              setValidationErrors({});
               setApplicationOpen(true);
             }}
             className="flex h-[46px] w-[178px] shrink-0 items-center justify-center bg-dark-brown text-[13px] font-semibold uppercase leading-none tracking-[0.08em] text-light-brown"
@@ -187,70 +253,134 @@ const CareersPage = () => {
           <button type="button" onClick={() => setApplicationOpen(false)}>Close</button>
         </div>
       ) : (
-        <form className="cohort-application-form" onSubmit={submitApplication}>
+        <form className="cohort-application-form" onSubmit={submitApplication} noValidate>
           <div className="cohort-modal-heading">
             <h2>Apply for cohort</h2>
             <p>Please fill out this quick form to register your interest.</p>
           </div>
 
+          {Object.keys(validationErrors).length > 0 && (
+            <div className="cohort-validation-summary" role="alert">
+              <p>Please complete or correct the following before submitting:</p>
+              <ul>
+                {Object.values(validationErrors).map((message) => (
+                  <li key={message}>{message}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
           <fieldset>
             <legend>Section 1: Personal details</legend>
             <label>
               Full name
-              <input name="fullName" type="text" placeholder="e.g. John Doe" required />
+              <input
+                name="fullName"
+                type="text"
+                placeholder="e.g. John Doe"
+                required
+                aria-invalid={Boolean(validationErrors.fullName)}
+                aria-describedby={validationErrors.fullName ? "full-name-error" : undefined}
+                onChange={() => clearValidationError("fullName")}
+              />
+              {validationErrors.fullName && <span className="cohort-field-error" id="full-name-error">{validationErrors.fullName}</span>}
             </label>
             <label>
               Email address
-              <input name="email" type="email" placeholder="e.g. johndoe@email.com" required />
+              <input
+                name="email"
+                type="email"
+                placeholder="e.g. johndoe@email.com"
+                required
+                aria-invalid={Boolean(validationErrors.email)}
+                aria-describedby={validationErrors.email ? "email-error" : undefined}
+                onChange={() => clearValidationError("email")}
+              />
+              {validationErrors.email && <span className="cohort-field-error" id="email-error">{validationErrors.email}</span>}
             </label>
             <label>
               Phone / WhatsApp number
-              <input name="phone" type="tel" placeholder="e.g. +234 80 1234 5678" required />
+              <input
+                name="phone"
+                type="tel"
+                placeholder="e.g. +234 80 1234 5678"
+                required
+                aria-invalid={Boolean(validationErrors.phone)}
+                aria-describedby={validationErrors.phone ? "phone-error" : undefined}
+                onChange={() => clearValidationError("phone")}
+              />
+              {validationErrors.phone && <span className="cohort-field-error" id="phone-error">{validationErrors.phone}</span>}
             </label>
           </fieldset>
 
           <fieldset>
             <legend>Section 2: Track of interest</legend>
-            <p className="cohort-field-question">Which testing track are you interested in?</p>
-            <div className="cohort-track-grid">
+            <p className="cohort-field-question" id="tracks-question">Which testing track are you interested in?</p>
+            <div
+              className="cohort-track-grid"
+              role="group"
+              aria-labelledby="tracks-question"
+              aria-describedby={validationErrors.tracks ? "tracks-error" : undefined}
+            >
               {["Manual QA Tester", "Automation Tester", "API & Backend Tester", "Performance Tester", "Help me choose (Not sure yet)"].map((track) => (
                 <label className="cohort-checkbox" key={track}>
                   <input
                     type="checkbox"
+                    name="tracks"
                     checked={tracks.includes(track)}
+                    aria-invalid={Boolean(validationErrors.tracks)}
                     onChange={() => toggleTrack(track)}
                   />
                   <span>{track}</span>
                 </label>
               ))}
             </div>
+            {validationErrors.tracks && <p className="cohort-field-error" id="tracks-error">{validationErrors.tracks}</p>}
           </fieldset>
 
           <fieldset>
             <legend>Section 3: Logistics</legend>
             <label>
               Current experience level
-              <select name="experience" defaultValue="" required>
+              <select
+                name="experience"
+                defaultValue=""
+                required
+                aria-invalid={Boolean(validationErrors.experience)}
+                aria-describedby={validationErrors.experience ? "experience-error" : undefined}
+                onChange={() => clearValidationError("experience")}
+              >
                 <option value="" disabled>Select your experience level</option>
                 <option>Complete beginner</option>
                 <option>Some testing experience</option>
                 <option>Working QA professional</option>
               </select>
+              {validationErrors.experience && <span className="cohort-field-error" id="experience-error">{validationErrors.experience}</span>}
             </label>
-            <div className="cohort-field-question">Do you have a laptop &amp; internet access for online live classes?</div>
-            <div className="cohort-choice-row" role="group" aria-label="Laptop and internet access">
+            <div className="cohort-field-question" id="laptop-question">Do you have a laptop &amp; internet access for online live classes?</div>
+            <div
+              className="cohort-choice-row"
+              role="group"
+              aria-labelledby="laptop-question"
+              aria-describedby={validationErrors.hasLaptop ? "laptop-error" : undefined}
+            >
               {["Yes", "No"].map((choice) => (
                 <button
                   type="button"
                   key={choice}
                   className={hasLaptop === choice ? "selected" : ""}
                   aria-pressed={hasLaptop === choice}
-                  onClick={() => setHasLaptop(choice)}
+                  data-validation-field="hasLaptop"
+                  onClick={() => {
+                    setHasLaptop(choice);
+                    clearValidationError("hasLaptop");
+                  }}
                 >
                   {choice}
                 </button>
               ))}
             </div>
+            {validationErrors.hasLaptop && <p className="cohort-field-error" id="laptop-error">{validationErrors.hasLaptop}</p>}
           </fieldset>
 
           <button className="cohort-submit" type="submit">Submit cohort application</button>
