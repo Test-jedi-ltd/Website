@@ -77,6 +77,38 @@ const FeaturedPost = ({ post }) => (
   </Link>
 )
 
+const BlogLoadingSkeleton = () => (
+  <div
+    className="space-y-8 pt-[21px] sm:space-y-10 lg:space-y-[49px]"
+    role="status"
+    aria-label="Loading blog posts"
+    aria-busy="true"
+  >
+    <span className="sr-only">Loading blog posts...</span>
+    <div className="h-[220px] animate-pulse rounded-[12px] bg-[#E9E4CB] sm:h-[240px] lg:h-[257px]">
+      <div className="flex h-full flex-col justify-end gap-3 rounded-[12px] bg-gradient-to-t from-[#1A2D5B]/20 to-transparent p-5 sm:p-6 lg:p-[34px]">
+        <div className="h-[22px] w-[84px] rounded-full bg-[#FFF9D7]/80" />
+        <div className="h-7 w-3/4 rounded bg-[#FFF9D7]/70 sm:h-8" />
+        <div className="h-7 w-1/2 rounded bg-[#FFF9D7]/50 sm:h-8" />
+      </div>
+    </div>
+    <div className="grid grid-cols-1 gap-x-[26px] gap-y-9 sm:grid-cols-2 lg:grid-cols-3 lg:gap-y-[37px]">
+      {Array.from({ length: 6 }, (_, index) => (
+        <div
+          key={index}
+          className="animate-pulse rounded-[16px] bg-white p-3 pb-[10px] ring-1 ring-inset ring-dark-brown/10"
+        >
+          <div className="aspect-[1.47/1] w-full rounded-[12px] bg-[#E9E4CB]" />
+          <div className="mt-[16px] h-6 w-[82px] rounded-full bg-[#D9C5B2]/55" />
+          <div className="mt-[12px] h-6 w-4/5 rounded bg-[#1A2D5B]/10" />
+          <div className="mt-2 h-4 w-full rounded bg-[#1A2D5B]/[0.07]" />
+          <div className="mt-2 h-4 w-2/3 rounded bg-[#1A2D5B]/[0.07]" />
+        </div>
+      ))}
+    </div>
+  </div>
+)
+
 export default function BlogPage() {
   const [posts, setPosts] = useState([])
   const [loading, setLoading] = useState(true)
@@ -116,7 +148,7 @@ export default function BlogPage() {
         <h1 className="sr-only">Test-Jedi blog</h1>
         <div className="mx-auto w-full max-w-[1176px] px-5">
           {loading ? (
-            <p className="py-16 text-center text-[#1A2D5B]">Loading blog posts...</p>
+            <BlogLoadingSkeleton />
           ) : error ? (
             <div className="py-16 text-center" role="alert">
               <p className="text-[#1A2D5B]">{error}</p>

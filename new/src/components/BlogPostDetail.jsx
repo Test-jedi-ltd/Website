@@ -69,6 +69,51 @@ const ArticleBody = ({ content }) =>
     </p>
   )
 
+const ArticleLoadingSkeleton = () => (
+  <main
+    className="overflow-hidden bg-[#FFF9D7] text-[#17234A]"
+    aria-busy="true"
+  >
+    <span className="sr-only" role="status" aria-label="Loading article">
+      Loading article...
+    </span>
+    <section className="mx-auto grid max-w-[1320px] grid-cols-1 items-center gap-8 px-[22px] py-10 sm:px-8 sm:py-14 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] lg:gap-[clamp(32px,6vw,88px)] lg:px-[6vw] lg:py-[clamp(48px,7vw,94px)]">
+      <header className="w-full max-w-[490px] animate-pulse">
+        <div className="h-3 w-36 rounded bg-[#964A21]/20" />
+        <div className="mt-6 h-12 w-full rounded bg-[#17234A]/10 sm:h-16" />
+        <div className="mt-3 h-12 w-4/5 rounded bg-[#17234A]/10 sm:h-16" />
+        <div className="mt-6 h-4 w-full max-w-[390px] rounded bg-[#17234A]/[0.08]" />
+        <div className="mt-2 h-4 w-4/5 max-w-[320px] rounded bg-[#17234A]/[0.08]" />
+        <div className="mt-8 flex items-center gap-[11px]">
+          <div className="h-[39px] w-[39px] rounded-full bg-[#17234A]/15" />
+          <div className="h-3 w-24 rounded bg-[#17234A]/10" />
+        </div>
+      </header>
+      <div className="min-h-[260px] animate-pulse rounded-[6px] bg-[#F5EDC4] p-3 shadow-[0_18px_50px_rgba(69,50,23,0.12)] sm:min-h-[320px] sm:p-6" />
+    </section>
+
+    <section className="bg-[#FFFDF2] px-[22px] py-[38px] sm:px-8 sm:py-12 lg:px-6 lg:pb-[100px] lg:pt-12">
+      <div className="mx-auto grid w-full max-w-[1060px] grid-cols-1 items-start gap-[38px] lg:grid-cols-[230px_minmax(0,720px)] lg:justify-center lg:gap-[clamp(40px,8vw,110px)]">
+        <aside className="animate-pulse bg-[#F5F4F2] p-[18px] lg:p-6">
+          <div className="h-3 w-24 rounded bg-[#964A21]/20" />
+          <div className="mt-4 h-6 w-4/5 rounded bg-[#17234A]/10" />
+          <div className="mt-6 aspect-[1.25/1] rounded-[6px] bg-[#E9E4CB]" />
+        </aside>
+        <article className="animate-pulse pt-2">
+          <div className="h-3 w-24 rounded bg-[#964A21]/20" />
+          <div className="mt-4 h-8 w-4/5 rounded bg-[#17234A]/10" />
+          <div className="mt-8 space-y-3">
+            <div className="h-4 w-full rounded bg-[#17234A]/[0.08]" />
+            <div className="h-4 w-full rounded bg-[#17234A]/[0.08]" />
+            <div className="h-4 w-5/6 rounded bg-[#17234A]/[0.08]" />
+            <div className="h-4 w-full rounded bg-[#17234A]/[0.08]" />
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+)
+
 export default function BlogPostDetail() {
   const { slug } = useParams()
   const [post, setPost] = useState(null)
@@ -115,9 +160,7 @@ export default function BlogPostDetail() {
     <>
       <Navbar />
       {loading ? (
-        <main className="flex min-h-[55vh] items-center justify-center bg-[#FFF9D7] px-5 text-[#17234A]">
-          <p>Loading article...</p>
-        </main>
+        <ArticleLoadingSkeleton />
       ) : error || !post ? (
         <main className="flex min-h-[55vh] flex-col items-center justify-center bg-[#FFF9D7] px-5 text-center text-[#17234A]">
           <p role="alert">{error || "This article could not be found."}</p>

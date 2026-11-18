@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
+import ToastNotification from "../components/ToastNotification";
 
 const steps = [
   "We read the scope and come back with questions, in writing.",
@@ -44,6 +45,7 @@ const Field = ({ label, id, type = "text", placeholder, select = false, required
 const ContactForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState(null);
+  const dismissStatus = useCallback(() => setStatus(null), []);
 
   const getContactEndpoint = () => {
     const hostname = window.location.hostname;
@@ -87,6 +89,7 @@ const ContactForm = () => {
   };
 
   return (
+    <>
   <form onSubmit={handleSubmit} className="mt-[15px] w-full max-w-[844px] bg-medium-brown p-5 sm:px-[31px] sm:pb-[32px] sm:pt-[50px]">
     <div className="grid gap-x-4 gap-y-4 sm:grid-cols-2">
       <Field id="full-name" label="Full name" placeholder="Your name" required />
@@ -144,15 +147,15 @@ const ContactForm = () => {
         <span className="font-['DM_Sans']">Or email operations@test-jedi.com</span>
       </a>
     </div>
-    {status && (
-      <p
-        className={`mt-4 text-[14px] ${status.type === "success" ? "text-dark-brown" : "text-red-800"}`}
-        role={status.type === "success" ? "status" : "alert"}
-      >
-        {status.message}
-      </p>
-    )}
   </form>
+      {status && (
+        <ToastNotification
+          type={status.type}
+          message={status.message}
+          onDismiss={dismissStatus}
+        />
+      )}
+    </>
   );
 };
 

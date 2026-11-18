@@ -71,4 +71,13 @@ describe("BlogPostDetail", () => {
     expect(screen.getByText("Site footer")).toBeInTheDocument()
     expect(getBlogPostBySlug).toHaveBeenCalledWith("current-article")
   })
+
+  it("shows an article layout skeleton while the article is loading", () => {
+    getBlogPostBySlug.mockReturnValue(new Promise(() => {}))
+    render(<BlogPostDetail />)
+
+    expect(screen.getByRole("status", { name: "Loading article" })).toBeInTheDocument()
+    expect(screen.getByRole("main")).toHaveAttribute("aria-busy", "true")
+    expect(screen.getByText("Loading article...")).toHaveClass("sr-only")
+  })
 })

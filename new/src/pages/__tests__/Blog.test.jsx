@@ -78,4 +78,15 @@ describe("BlogPage", () => {
 
     expect(await screen.findByText("No articles are available yet.")).toBeInTheDocument()
   })
+
+  it("shows a blog layout skeleton while posts are loading", () => {
+    getBlogPosts.mockReturnValue(new Promise(() => {}))
+    render(<BlogPage />)
+
+    expect(screen.getByRole("status", { name: "Loading blog posts" })).toHaveAttribute(
+      "aria-busy",
+      "true"
+    )
+    expect(screen.getByText("Loading blog posts...")).toHaveClass("sr-only")
+  })
 })
