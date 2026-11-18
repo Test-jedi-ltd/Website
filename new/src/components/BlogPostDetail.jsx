@@ -159,9 +159,6 @@ export default function BlogPostDetail() {
                   <strong className="block font-['DM_Sans']">
                     {post.author || "Test-Jedi"}
                   </strong>
-                  <small className="mt-[5px] block text-[10px] text-[#737482]">
-                    Test-Jedi contributor
-                  </small>
                 </span>
               </div>
             </header>
@@ -177,10 +174,6 @@ export default function BlogPostDetail() {
                 fetchpriority="high"
                 className="block max-h-[430px] h-full w-full object-contain"
               />
-              <figcaption className="absolute inset-x-[22px] bottom-5 flex justify-between text-[9px] font-extrabold uppercase tracking-[0.12em] text-white [text-shadow:0_1px_8px_#15183e]">
-                <span>{categoryFor(post)}</span>
-                <span>TEST-JEDI</span>
-              </figcaption>
             </figure>
           </section>
 
