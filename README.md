@@ -62,12 +62,20 @@ cp .env.example .env
 
 The shared contact form on `/contact` and `/services` sends submissions through
 the Vercel function at `/api/contact`, using the Resend email API. Set these
-server-side environment variables in Vercel. For local API testing, use the
-root `.env.example` as a template for `.env`, then run `vercel dev`:
+server-side environment variables in Vercel. For local development, copy
+`new/.env.example` to `new/.env`, fill in the mail settings below, and run
+`npm run dev` from `new`; the development server routes `/api/contact` to the
+same mail handler. To test the Vercel function runtime locally, use the root
+`.env.example` as a template for `.env` and run `vercel dev`:
 
 - `RESEND_API_KEY`: a Resend API key.
 - `CONTACT_FROM_EMAIL`: a sender address on a domain verified with Resend.
 - `CONTACT_EMAIL`: destination address (defaults to `operations@test-jedi.com`).
+
+Set the mail variables for the Vercel environments serving
+`test-jedi-nine.vercel.app` (Production and Preview, as applicable). The custom
+`test-jedi.com` site is served through Cloudflare, so its form posts to the
+Vercel API endpoint with a restricted origin allowlist.
 
 Do not prefix these values with `REACT_APP_`; the API key must remain server
 side. The form reports an error instead of claiming success if email delivery

@@ -1,0 +1,3 @@
+I am getting an error ContactSection.js:66 
+ POST http://localhost:3000/api/contact 502 (Bad Gateway)
+(anonymous)	@	ContactSection.js:66 everytime I try to send email from my contact form. debug this issue and make sure the email is successfully sent

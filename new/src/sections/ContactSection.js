@@ -45,6 +45,14 @@ const ContactForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState(null);
 
+  const getContactEndpoint = () => {
+    const hostname = window.location.hostname;
+    if (hostname === "test-jedi.com" || hostname === "www.test-jedi.com") {
+      return "https://test-jedi-nine.vercel.app/api/contact";
+    }
+    return "/api/contact";
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const form = event.currentTarget;
@@ -55,19 +63,19 @@ const ContactForm = () => {
     setStatus(null);
 
     try {
-      const response = await fetch("/api/contact", {
+      const response = await fetch(getContactEndpoint(), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      const result = await response.json();
+      const result = await response.json().catch(() => ({}));
 
       if (!response.ok) {
         throw new Error(result.error || "We couldn't send your message. Please try again.");
       }
 
       form.reset();
-      setStatus({ type: "success", message: "Thanks for your message. We'll be in touch soon." });
+      setStatus({ type: "success", message: "Message sent successfully. We'll be in touch soon." });
     } catch (error) {
       setStatus({
         type: "error",

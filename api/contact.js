@@ -6,6 +6,20 @@ const allowedServices = new Set([
   "Functional testing",
 ]);
 
+const allowedOrigins = new Set([
+  "https://test-jedi.com",
+  "https://www.test-jedi.com",
+  "https://test-jedi-nine.vercel.app",
+]);
+
+const isAllowedOrigin = (origin) => (
+  allowedOrigins.has(origin)
+  || (
+    process.env.NODE_ENV !== "production"
+    && /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)
+  )
+);
+
 const readText = (value, maxLength) => (
   typeof value === "string" && value.trim().length <= maxLength
     ? value.trim()
@@ -20,6 +34,22 @@ const isValidDate = (value) => {
 };
 
 module.exports = async function contact(req, res) {
+  const origin = req.headers?.origin;
+  if (origin) {
+    if (!isAllowedOrigin(origin)) {
+      return res.status(403).json({ error: "This website is not allowed to submit the contact form." });
+    }
+
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    res.setHeader("Vary", "Origin");
+    res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  }
+
+  if (req.method === "OPTIONS") {
+    return res.status(204).end();
+  }
+
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
     return res.status(405).json({ error: "Method not allowed." });
@@ -104,7 +134,32 @@ module.exports = async function contact(req, res) {
   }
 
   if (!emailResponse.ok) {
-    console.error(`Contact email provider returned HTTP ${emailResponse.status}.`);
+    let providerMessage = "";
+    try {
+      const providerError = await emailResponse.json();
+      if (typeof providerError?.message === "string") {
+        providerMessage = providerError.message.trim().slice(0, 300);
+      }
+    } catch (error) {
+      console.error("Could not read contact email provider error response.", error);
+    }
+
+    console.error(
+      `Contact email provider returned HTTP ${emailResponse.status}.`,
+      providerMessage || "No provider error message was returned."
+    );
+    if (emailResponse.status === 401) {
+      return res.status(503).json({
+        error: "Resend rejected the API key. Check RESEND_API_KEY in new/.env, then restart the development server.",
+      });
+    }
+    if (emailResponse.status === 403) {
+      return res.status(502).json({
+        error: providerMessage
+          ? `Resend rejected the sender or recipient: ${providerMessage}`
+          : "Resend rejected the sender or recipient. Verify the sender domain and recipient settings in Resend.",
+      });
+    }
     return res.status(502).json({ error: "We couldn't send your message right now. Please try again." });
   }
 

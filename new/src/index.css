@@ -979,6 +979,30 @@ footer {
   color: #964a21;
 }
 
+.blog-detail-copy p {
+  margin-bottom: 18px;
+  font-size: 15px;
+  line-height: 1.85;
+}
+.blog-detail-copy ul,
+.blog-detail-copy ol {
+  margin-bottom: 18px;
+  padding-left: 22px;
+}
+.blog-detail-copy ul {
+  list-style: disc;
+}
+.blog-detail-copy ol {
+  list-style: decimal;
+}
+.blog-detail-copy img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 38px 0;
+  background: #f5edc4;
+}
+
 /* Homepage PNG reference overrides */
 .site-header {
   height: 74px;

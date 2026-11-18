@@ -4,37 +4,56 @@ import { getBlogPostBySlug, getBlogPosts } from "../lib/firestore"
 import Navbar from "../sections/Navbar"
 import Footer from "../sections/Footer"
 import PostContent from "./PostContent"
-import heroImage from "../assets/blog-post-hero.jpg"
+import heroImage from "../assets/blog-detail-cover.png"
 import relatedImageOne from "../assets/blog-post-detail-2.svg"
 import relatedImageTwo from "../assets/blog-post-related-2.jpg"
 
 const categoryFor = (post) =>
   post.category || post.tags?.[0] || "TEST-JEDI"
 
+const readingTimeFor = (post) => {
+  if (Number.isFinite(post.readingTime) && post.readingTime > 0) {
+    return post.readingTime
+  }
+
+  const words = (post.contentText || post.content || "")
+    .replace(/<[^>]*>/g, " ")
+    .replace(/&[a-z0-9#]+;/gi, " ")
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean).length
+
+  return Math.max(1, Math.ceil(words / 200))
+}
+
+const authorInitials = (author) =>
+  (author || "Test-Jedi")
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0])
+    .join("")
+    .toUpperCase()
+
 const RelatedCard = ({ post, fallbackImage }) => (
   <Link
     to={`/blog/${post.slug}`}
-    className="block rounded-[12px] bg-white p-[7px] ring-1 ring-inset ring-black/5 transition-transform duration-300 hover:-translate-y-0.5"
+    className="block rounded-[8px] bg-white p-[8px] transition-transform duration-300 hover:-translate-y-0.5"
   >
     <img
       src={post.featuredImage || fallbackImage}
       alt={post.featuredImage ? post.featuredImageAlt || post.title : ""}
       loading="lazy"
-      className="aspect-[1.47/1] w-full rounded-[8px] bg-white object-cover"
+      className="aspect-[1.25/1] w-full rounded-[6px] border border-[#ECE9DF] bg-white object-cover object-top"
     />
-    <span className="mt-[9px] flex min-h-[18px] w-fit items-center rounded-full border border-[#C4D5FF] bg-white px-[6px]">
-      <span className="font-['DM_Sans'] text-[9px] leading-none text-[#1A2D5B]">
+    <span className="mt-[9px] inline-block text-[8px] text-[#74778A]">
+      <span className="font-['DM_Sans']">
         {categoryFor(post)}
       </span>
     </span>
-    <h3 className="mt-2 text-[14px] leading-[18px] text-[#1A2D5B]">
+    <h3 className="m-0 text-[11px] leading-[1.5] text-[#1A2D5B]">
       <span className="font-['DM_Sans'] font-semibold">{post.title}</span>
     </h3>
-    {post.excerpt && (
-      <p className="mt-1 text-[12px] leading-[17px] text-[#1A2D5B]/70">
-        <span className="font-['DM_Sans']">{post.excerpt}</span>
-      </p>
-    )}
   </Link>
 )
 
@@ -42,7 +61,7 @@ const ArticleBody = ({ content }) =>
   content ? (
     <PostContent
       html={content}
-      className="blog-post-copy text-[#1A2D5B]"
+      className="blog-post-copy blog-detail-copy text-[#1A2D5B]"
     />
   ) : (
     <p className="font-['DM_Sans'] text-[16px] leading-6 text-[#1A2D5B]">
@@ -96,91 +115,116 @@ export default function BlogPostDetail() {
     <>
       <Navbar />
       {loading ? (
-        <main className="flex min-h-[55vh] items-center justify-center bg-[#FDFADC] px-5 text-[#1A2D5B]">
+        <main className="flex min-h-[55vh] items-center justify-center bg-[#FFF9D7] px-5 text-[#17234A]">
           <p>Loading article...</p>
         </main>
       ) : error || !post ? (
-        <main className="flex min-h-[55vh] flex-col items-center justify-center bg-[#FDFADC] px-5 text-center text-[#1A2D5B]">
+        <main className="flex min-h-[55vh] flex-col items-center justify-center bg-[#FFF9D7] px-5 text-center text-[#17234A]">
           <p role="alert">{error || "This article could not be found."}</p>
           <Link
             to="/blog"
-            className="mt-4 border-b border-[#1A2D5B] pb-1 text-[13px] font-semibold"
+            className="mt-4 border-b border-[#17234A] pb-1 text-[13px] font-semibold"
           >
             Back to all articles
           </Link>
         </main>
       ) : (
-        <main className="overflow-hidden bg-[#FDFADC] text-[#1A2D5B]">
-          <section className="relative h-[420px] overflow-hidden bg-[#FDFADC] sm:h-[500px] lg:h-[537px]">
-            <img
-              src={post.featuredImage || heroImage}
-              alt={post.featuredImage ? post.featuredImageAlt || post.title : ""}
-              fetchpriority="high"
-              className="absolute inset-0 h-full w-full object-cover object-center"
-            />
-            <div
-              className="absolute inset-0 bg-gradient-to-t from-[#03102E]/80 via-[#1A2D5B]/30 to-[#1A2D5B]/10"
-              aria-hidden="true"
-            />
-            <header className="relative z-10 flex h-full items-end px-5 pb-[70px] text-white sm:px-[5vw] lg:pb-[140px]">
-              <h1 className="m-0 w-full max-w-[980px] text-[26px] leading-[32px] sm:text-[29px] sm:leading-[36px] lg:text-[31px] lg:leading-[38px]">
-                <span className="font-['DM_Sans'] font-bold">{post.title}</span>
+        <main className="overflow-hidden bg-[#FFF9D7] text-[#17234A]">
+          <section
+            className="mx-auto grid max-w-[1320px] grid-cols-1 items-center gap-8 px-[22px] py-10 sm:px-8 sm:py-14 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] lg:gap-[clamp(32px,6vw,88px)] lg:px-[6vw] lg:py-[clamp(48px,7vw,94px)]"
+            aria-labelledby="article-title"
+          >
+            <header className="max-w-[490px]">
+              <p className="mb-[22px] text-[10px] font-extrabold uppercase tracking-[0.15em] text-[#99491F]">
+                {categoryFor(post)}
+                <span className="px-[6px] text-[#C68B4B]" aria-hidden="true">·</span>
+                {readingTimeFor(post)} MIN READ
+              </p>
+              <h1
+                id="article-title"
+                className="m-0 text-[clamp(38px,5vw,68px)] leading-[1.04] tracking-[-0.045em] text-[#17234A]"
+              >
+                <span className="font-['Playfair_Display'] font-semibold">{post.title}</span>
               </h1>
+              {post.excerpt && (
+                <p className="mt-[22px] mb-[30px] max-w-[390px] text-[clamp(15px,1.5vw,18px)] leading-[1.65] text-[#555B6B]">
+                  <span className="font-['DM_Sans']">{post.excerpt}</span>
+                </p>
+              )}
+              <div className="flex items-center gap-[11px] text-[12px] text-[#17234A]">
+                <span className="grid h-[39px] w-[39px] shrink-0 place-items-center rounded-full bg-[#17234A] text-[11px] font-extrabold text-[#FFF9D7]">
+                  {authorInitials(post.author)}
+                </span>
+                <span>
+                  <strong className="block font-['DM_Sans']">
+                    {post.author || "Test-Jedi"}
+                  </strong>
+                  <small className="mt-[5px] block text-[10px] text-[#737482]">
+                    Test-Jedi contributor
+                  </small>
+                </span>
+              </div>
             </header>
+
+            <figure className="relative m-0 grid min-h-[260px] min-w-0 place-items-center overflow-hidden rounded-[6px] bg-[#F5EDC4] p-3 shadow-[0_18px_50px_rgba(69,50,23,0.12)] sm:min-h-[320px] sm:p-6">
+              <img
+                src={post.featuredImage || heroImage}
+                alt={
+                  post.featuredImage
+                    ? post.featuredImageAlt || post.title
+                    : "Illustration explaining HTTP headers and message bodies"
+                }
+                fetchpriority="high"
+                className="block max-h-[430px] h-full w-full object-contain"
+              />
+              <figcaption className="absolute inset-x-[22px] bottom-5 flex justify-between text-[9px] font-extrabold uppercase tracking-[0.12em] text-white [text-shadow:0_1px_8px_#15183e]">
+                <span>{categoryFor(post)}</span>
+                <span>TEST-JEDI</span>
+              </figcaption>
+            </figure>
           </section>
 
-          <section className="px-5 pb-[64px] pt-[56px] sm:px-8 lg:px-0 lg:pt-[96px]">
-            <div className="mx-auto grid w-full max-w-[980px] grid-cols-1 gap-12 lg:grid-cols-2 lg:items-start lg:gap-x-[80px]">
-              <aside className="order-2 mx-auto w-full max-w-[480px] bg-[#FAFAFA] px-4 pb-[53px] pt-[42px] lg:order-1 lg:mx-0">
-                <div className="bg-[#F8F4D4] px-4 pb-[58px] pt-[36px]">
-                  <span className="flex h-[19px] w-fit items-center rounded-full bg-white/25 px-[10px]">
-                    <span className="font-['DM_Sans'] text-[9px] font-semibold uppercase leading-none tracking-[0.08em] text-[#964A21]">
-                      Related stories
-                    </span>
-                  </span>
-                  <h2 className="mt-[10px] text-[30px] leading-[38px] text-[#1A2D5B]">
-                    <span className="font-['DM_Sans'] font-semibold">
-                      <span className="block">More stories</span>
-                      <span className="block">like this</span>
-                    </span>
-                  </h2>
-                </div>
-
-                <div className="mt-[40px] space-y-[18px] sm:mt-[59px]">
-                  {relatedPosts.length ? (
-                    relatedPosts.map((relatedPost, index) => (
+          <section className="bg-[#FFFDF2] px-[22px] py-[38px] sm:px-8 sm:py-12 lg:px-6 lg:pb-[100px] lg:pt-12">
+            <div className="mx-auto grid w-full max-w-[1060px] grid-cols-1 items-start gap-[38px] lg:grid-cols-[230px_minmax(0,720px)] lg:justify-center lg:gap-[clamp(40px,8vw,110px)]">
+              <aside
+                className="grid grid-cols-2 gap-[10px] bg-[#F5F4F2] p-[18px] lg:sticky lg:top-[110px] lg:block lg:p-6"
+                aria-label="Related stories"
+              >
+                <p className="col-span-full mb-0 text-[9px] font-extrabold uppercase tracking-[0.15em] text-[#99491F]">
+                  Related stories
+                </p>
+                <h2 className="col-span-full mb-1 mt-0 font-['Playfair_Display'] text-[25px] font-semibold leading-[1.12] text-[#17234A] lg:mb-6">
+                  More stories like this
+                </h2>
+                {relatedPosts.length ? (
+                  relatedPosts.map((relatedPost, index) => (
+                    <div className="mt-0 lg:mt-[14px]" key={relatedPost.id || relatedPost.slug}>
                       <RelatedCard
-                        key={relatedPost.id || relatedPost.slug}
                         post={relatedPost}
                         fallbackImage={index === 0 ? relatedImageOne : relatedImageTwo}
                       />
-                    ))
-                  ) : (
-                    <p className="px-2 font-['DM_Sans'] text-[14px] text-[#1A2D5B]/70">
-                      More articles coming soon.
-                    </p>
-                  )}
-                </div>
+                    </div>
+                  ))
+                ) : (
+                  <p className="col-span-full mb-0 px-2 text-[14px] text-[#1A2D5B]/70">
+                    More articles coming soon.
+                  </p>
+                )}
               </aside>
 
-              <article className="order-1 lg:order-2">
+              <article className="min-w-0 pt-2">
                 <header className="mb-[22px]">
-                  <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#964A21]">
+                  <p className="mb-[10px] text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#99491F]">
                     {categoryFor(post)}
                   </p>
-                  <h2 className="m-0 text-[29px] leading-[34px] text-[#132247]">
-                    <span className="font-['DM_Sans'] font-semibold">{post.title}</span>
+                  <h2 className="m-0 text-[clamp(26px,3vw,38px)] leading-[1.15] text-[#17234A]">
+                    <span className="font-['Playfair_Display'] font-semibold">{post.title}</span>
                   </h2>
                   {post.excerpt && (
-                    <p className="mt-[18px] text-[16px] leading-[24px] text-[#1A2D5B]">
-                      <span className="font-['DM_Sans'] font-medium">{post.excerpt}</span>
+                    <p className="mb-[30px] mt-2 text-[14px] font-semibold text-[#697087]">
+                      <span className="font-['DM_Sans']">{post.excerpt}</span>
                     </p>
                   )}
-                  <p className="mt-3 text-[11px] uppercase tracking-[0.1em] text-[#1A2D5B]/65">
-                    <span className="font-['DM_Sans']">
-                      By {post.author || "Test-Jedi"}
-                    </span>
-                  </p>
                 </header>
 
                 <ArticleBody content={post.content} />
@@ -188,7 +232,7 @@ export default function BlogPostDetail() {
                 <div className="mt-10 text-right">
                   <Link
                     to="/blog"
-                    className="text-[12px] uppercase tracking-[0.1em] text-[#964A21] transition-colors hover:text-[#132247]"
+                    className="text-[12px] uppercase tracking-[0.1em] text-[#99491F] transition-colors hover:text-[#17234A]"
                   >
                     ← Back to all articles
                   </Link>
